@@ -83,6 +83,15 @@ ether() {
    fi
 }
 
+serial() {
+   if test -d /Library
+   then
+      ioreg -l | awk '/IOPlatformSerialNumber/ {print $4}' | tr -d '"'
+   else
+      sudo dmidecode -s system-serial-number
+   fi
+}
+
 (
    model
    cpu
@@ -90,4 +99,5 @@ ether() {
    disk
    gpu
    ether
+   serial
 ) | sed 's/  *$//' | tr '\012' ';' | sed 's/;$/|/;s/;/; /g' | tr '|' '\012' | grep .
