@@ -7,12 +7,13 @@ model() {
    then
       sysctl -n hw.model
    else
-      md=$(sudo dmidecode -s system-manufacturer)
+      mn=$(sudo dmidecode -s system-manufacturer | sed 's/ *$//')
       if test "$mn" = ""
       then
-        pn=$(sudo dmidecode -s baseboard-manufacturer)
+        mn=$(sudo dmidecode -s baseboard-manufacturer | sed 's/ *$//')
       fi
-      echo "$pn" | sed 's/ Inc\.//;s/ Corporation//' | tr '\012' ' '
+      echo "$mn" | sed 's/ Inc\.//;s/ Corporation//' | tr '\012' ' '
+
       pn=$(sudo dmidecode -s system-product-name | sed 's/Precision Tower //;s/Precision WorkStation //;s/   *$//')
       if test "$pn" = ""
       then
@@ -88,7 +89,12 @@ serial() {
    then
       ioreg -l | awk '/IOPlatformSerialNumber/ {print $4}' | tr -d '"'
    else
-      sudo dmidecode -s system-serial-number
+      serial=$(sudo dmidecode -s system-serial-number | sed 's/ *$//')
+      if test "$serial" = ""
+      then
+        serial=$(sudo dmidecode -s baseboard-serial-number | sed 's/ *$//')
+      fi
+      echo "$serial"
    fi
 }
 
