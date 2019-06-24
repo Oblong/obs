@@ -148,10 +148,10 @@ bs_platform_workarounds() {
     # Check resources
     # Work around https://bugs.launchpad.net/ubuntu/+source/lightdm/+bug/867806
     # by not aborting if df complains about not being able to open a .gvfs.
-    free="$(df / | egrep '/$|^\//' | awk '{print $2}')"
+    free="$(df / | sed 's/Program Files/Program.Files/' | egrep '/$|^\//' | awk '{print $2}')"
     case "$free" in
     "") # on ubuntu core, df / shows space on /home
-        free="$(df . | tail -n 1 | awk '{print $2}')";;
+        free="$(df . | sed 's/Program Files/Program.Files/' | tail -n 1 | awk '{print $2}')";;
     esac
 
     #echo "Disk space on /: $free blocks"

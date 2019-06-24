@@ -1,4 +1,4 @@
-REM @echo off
+@echo off
 REM Invoke either cygwin or git-for-windows-bash bau, as appropriate
 REM Preference is set by project in ci/shell
 REM Valid values there are cygwin or gitbash

@@ -115,6 +115,7 @@ bs_detect_os() {
         ;;
     CYGWIN*WOW64) echo cygwin;;
     CYGWIN*)      echo cygwin;;
+    MINGW*)       echo mingw;;
     *) bs_abort "unrecognized os" >&2 ;;
     esac
 }
@@ -137,7 +138,7 @@ bs_detect_ncores() {
     osx*)
         system_profiler -detailLevel full SPHardwareDataType | awk '/Total Number .f Cores/ {print $5};'
         ;;
-    cygwin)
+    cygwin|mingw)
         echo "$NUMBER_OF_PROCESSORS"
         ;;
     esac
@@ -146,16 +147,16 @@ bs_detect_ncores() {
 # Only used on Windows
 bs_detect_toolchain()
 {
-    if test -d "/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community"
+    if test -d "$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community"
     then
         echo msvc2017
-    elif test -d "/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 14.0"
+    elif test -d "$DRIVEC/Program Files (x86)/Microsoft Visual Studio 14.0"
     then
         echo msvc2015
-    elif test -d "/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 12.0"
+    elif test -d "$DRIVEC/Program Files (x86)/Microsoft Visual Studio 12.0"
     then
         echo msvc2013
-    elif test -d "/cygdrive/c/Program Files (x86)/Microsoft Visual Studio 10.0"
+    elif test -d "$DRIVEC/Program Files (x86)/Microsoft Visual Studio 10.0"
     then
         echo msvc2010
     else
@@ -260,7 +261,7 @@ bs_get_yobuild_home() {
     then
         # First try: get from debian/rules
         # FIXME: on Windows, debian/rules in samples is a Windows-style path, kind of, with C: tacked on.  Convert to cygwin.
-        awk -F= '/^YOBUILD=/ {print $2}' "${bs_origdirslash}debian/rules" | sed 's,^C:,/cygdrive/c,;s,//,/,g' | tr -d '\015'
+        awk -F= '/^YOBUILD=/ {print $2}' "${bs_origdirslash}debian/rules" | sed "s,^C:,$DRIVEC,;s,//,/,g" | tr -d '\015'
     elif ob-version | awk 'BEGIN { err=1 } /ob_yobuild_dir/ { print $3; err=0 } END { exit err }'
     then
         # Second try: ask ob-version
@@ -488,16 +489,21 @@ bs_untar_restricted() {
     /usr/local/*) dest="/usr/local"; depth=2;;
     /opt/*) dest="/opt"; depth=1;;
     /./opt/*) dest="/opt"; depth=2;;
-    /cygdrive/c/opt/*) dest="/cygdrive/c/opt"; depth=3;;
-    /cygdrive/c//opt/*) dest="/cygdrive/c/opt"; depth=3;;  # --strip-components ignores doubled slashes
+    /cygdrive/c/opt/*) dest="$DRIVEC/opt"; depth=3;;   # cygwin
+    /cygdrive/c//opt/*) dest="$DRIVEC/opt"; depth=3;;  # --strip-components ignores doubled slashes
+    /c/opt/*) dest="$DRIVEC/opt"; depth=2;;       # msys aka git-bash
     *) bs_abort "bs_untar_restricted: illegal destination $dest for tarball $1, only /usr/local and /opt allowed";;
     esac
 
     # Prepend c: if missing on windows
-    if test "$_os" = cygwin && test "$dest" != "/cygdrive/c/opt"
-    then
-        dest="/cygdrive/c$dest"
-    fi
+    # FIXME: be less kludgy
+    case "$_os" in
+    cygwin|mingw)
+        if test "$dest" != "$DRIVEC/opt"
+        then
+            dest="$DRIVEC$dest"
+        fi
+    esac
 
     $SUDO mkdir -p "$dest"
     $SUDO tar -o --strip-components=$depth -C "$dest" -xf "$1" 2>&1
@@ -1417,7 +1423,7 @@ bs_upload2()
     changenumber=$1; shift
 
     case $os in
-    osx*|cygwin|ubu*) ;;
+    osx*|cygwin|mingw|ubu*) ;;
     *) bs_abort "unrecognized os $os";;
     esac
     test $project || bs_abort "expected project"
@@ -1480,7 +1486,13 @@ bs_set_globals() {
 
     SUDO=sudo
     case $_os in
-    cygwin) SUDO="" ;;
+    cygwin|mingw) SUDO="" ;;
+    esac
+
+    DRIVEC=/wrong/os
+    case $_os in
+    cygwin) DRIVEC=/cygdrive/c/;;
+    mingw) DRIVEC=/c;;
     esac
 
     # FIXME: provide fewer variables

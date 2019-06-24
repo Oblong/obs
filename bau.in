@@ -90,7 +90,7 @@ SRC=$(pwd)/ci
 case $_os in
 ubu*) BAU_OS=ubu;;
 osx*) BAU_OS=osx;;
-cyg*) BAU_OS=win;;
+cyg*|mingw*) BAU_OS=win;;
 *) bs_abort "Don't know which buildshim type _os $_os maps to";;
 esac
 
