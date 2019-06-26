@@ -30,7 +30,7 @@ blacklist_re="g-speak|oblong|mezzanine|whiteboard|corkboard|ob-http-ctl|libpdl-o
 # Regular expression for packages to not remove, even though they are may be from oblong
 # The mesa/libgbm1/libxatracker2 entries are to avoid removing build products of oblong-mesa
 # Keep this list in sync with the one in bs_apt_uninstall_deps
-whitelist_re="oblong-obs|-mesa|mesa-|libgbm1|libxatracker2|udev|systemd|ubuntu-keyring"
+whitelist_re="bzip2|oblong-obs|-mesa|mesa-|libgbm1|libxatracker2|udev|systemd|ubuntu-keyring"
 
 OLDPKGS=$(dpkg-query -l | egrep -i "$blacklist_re" | awk '{print $2}' | egrep -v "$whitelist_re" || true)
 
