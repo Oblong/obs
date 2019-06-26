@@ -1249,7 +1249,7 @@ bs_apt_uninstall_deps() {
     # Regular expression for packages to not remove, even though they are may be from oblong
     # The mesa/libgbm1/libxatracker2 entries are to avoid removing build products of oblong-mesa
     # Keep this list in sync with the one in ob-remove.sh.
-    local whitelist_re="oblong-obs|-mesa|mesa-|libgbm1|libxatracker2|udev|systemd|ubuntu-keyring"
+    local whitelist_re="bzip2|oblong-obs|-mesa|mesa-|libgbm1|libxatracker2|udev|systemd|ubuntu-keyring"
 
     $SUDO apt-get -q autoremove --purge -y $(bs_deps_list | egrep -v "$whitelist_re") 'build-deps*' || true
     bs_deps_clear
