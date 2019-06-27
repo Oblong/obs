@@ -2831,6 +2831,21 @@
         },
         {
             "category" : "solutions",
+            "name"     : "gata",
+            "repourl"  : "git@gitlab.oblong.com:solutions/gata.git",
+            "builders" : [
+                { "os":"osx1013",        "branch"  : "master"              },
+                { "os":"osx1013",        "branch"  : "master", "try":"yes" },
+                { "os":"osx1014",        "branch"  : "master"              },
+                { "os":"osx1014",        "branch"  : "master", "try":"yes" },
+                { "os":"ubu1804",        "branch"  : "master"              },
+                { "os":"ubu1804",        "branch"  : "master", "try":"yes" },
+                { "os":"ubu1904",        "branch"  : "master"              },
+                { "os":"ubu1904",        "branch"  : "master", "try":"yes" }
+            ]
+        },
+        {
+            "category" : "solutions",
             "name"     : "growroom",
             "homepage" : "https://gitlab.oblong.com/solutions/growroom",
             "repourl"  : "git@gitlab.oblong.com:solutions/growroom.git",
