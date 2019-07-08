@@ -63,6 +63,8 @@ obs deps-filter-log         - filter apt log into list of dependencies
 obs deps-clear              - clear current list of dependencies
 obs deps-append             - add to current list of dependencies
 obs deps-list               - show current list of dependencies
+obs describe                - show git revision etc. for debugging.
+obs set-buildname X         - saves buildname (e.g. yovo-master-osx1014/37) for use during upload
 _EOF_
 }
 
@@ -90,6 +92,15 @@ case "$SRCFILE" in
 ./obs|./obs.in) . ./obs_funcs.sh;;
 *)     . obs_funcs.sh;;
 esac
+
+# Functions not worth putting in obs_funcs.sh for now
+
+# Show tags and current description relative to them.
+# For buildbot diagnostics.
+obs_tags() {
+    git tag -l
+    git describe --tags
+}
 
 # Running without any arguments may be a typo in a script, so show usage and abort.
 case "$1" in
@@ -125,6 +136,7 @@ detect_toolchain)      bs_detect_toolchain;;
 detect_os)             # shellcheck disable=SC2154
                        echo "$_os" ;; # bs_detect_os already called in ". obs_funcs.sh"
 get_artifact_subdir)   bs_get_artifact_subdir;;
+set_artifact_subdir)   bs_set_artifact_subdir "$1";;
 get_cef_version)       bs_get_cef_version;;
 get_changenum_git)     bs_get_changenum_git;;
 get_gspeak_home)       bs_get_gspeak_home;;
@@ -161,5 +173,6 @@ deps_list)             bs_deps_list;;
 deps_clear)            bs_deps_clear;;
 intuit_buildtype)      bs_intuit_buildtype;;
 is_try)                bs_is_try_build ;;
+describe)              obs_describe;;
 *)                     echo "Unknown cmd $cmd"; usage; exit 1;;
 esac

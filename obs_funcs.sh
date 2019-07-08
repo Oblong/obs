@@ -1176,6 +1176,17 @@ bs_get_artifact_subdir() {
     fi
 }
 
+# Our buildbot's master.cfg calls this to tell us where it wants artifacts uploaded to.
+#
+# This used to be just a shell command in master.cfg, but that
+# doesn't work with native win32 build workers.
+# So now master.cfg runs obs (which on native windows buildbots is obs.bat,
+# which invokes this script via cygwin or git-bash as appropriate).
+bs_set_artifact_subdir() {
+    # FIXME: do we need to handle other cases?
+    printf '%s\n' "$1" > ../bs-artifactsubdir
+}
+
 # If running on a buildbot, output its name and return true
 # If not running on a buildbot, return false.  FIXME: return git repo name for local source build use case?
 bs_get_builder_name() {
