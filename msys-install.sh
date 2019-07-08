@@ -16,7 +16,7 @@ chmod +x obs
 # install-bau: bau
 install -m 755 -d ${DESTDIR}${PREFIX}/bin
 install -m 755 bau ${DESTDIR}${PREFIX}/bin
-install -m 755 bau.bat ${DESTDIR}${PREFIX}/bin
+install -m 755 bau.cmd ${DESTDIR}${PREFIX}/bin
 install -m 755 ob-coverage.sh ${DESTDIR}${PREFIX}/bin
 install -m 755 uberbau ${DESTDIR}${PREFIX}/bin
 install -m 755 -d ${DESTDIR}${PREFIX}/share/man/man1
