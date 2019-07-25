@@ -11,6 +11,23 @@ esac
   ./bau -v list | grep package
 }
 
+@test "bau-meson" {
+  # Get access to uncommitted obs and obs_funcs.sh
+  PATH="$(pwd):$PATH"
+
+  if ! meson --version || ! pkg-config --version
+  then
+    echo "Skipping test, since meson or pkg-config not available (ECHICKENEGG)."
+    echo "(To test meson support, install yobuild13, then do 'make check-bau'.)"
+  else
+    cd tests/bau-meson
+    bau -v all
+    bau -v clean
+    rm pcredemo*tar.gz
+    cd ../..
+  fi
+}
+
 @test "bau-trickle" {
   if test -d /etc/apt/sources.list.d
   then

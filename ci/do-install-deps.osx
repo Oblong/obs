@@ -7,4 +7,10 @@ do_install_deps() {
   then
     brew install go
   fi
+
+  # We would need meson to test bau's meson support
+  if ! meson --version
+  then
+    brew install meson
+  fi
 }

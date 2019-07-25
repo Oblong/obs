@@ -1,0 +1,177 @@
+#!/usr/bin/make -f
+# -*- makefile -*-
+
+#--- Begin lines edited by ob-set-defaults ---
+# ob-set-defaults is the tool to use to change G_SPEAK_HOME, YOBUILD,
+# PREFIX, and package names suffix etc. properly, such that
+# 'debuild -b' would produce a valid debian package.
+# See "ob-set-defaults --help" (and, if this project has it, ci/ob-set-defaults.conf).
+
+# PREFIX is where this project should be installed.
+# By default, it's the same as G_SPEAK_HOME.
+# To change it independently, do e.g.
+#   ob-set-defaults --g-speak 3.28 --prefix /opt/a-better-place
+# and if you want it to stick, set PREFIX in ci/ob-set-defaults.conf.
+# (Sorry for the duplication.  ob-set-defaults may change to make that option sticky later.)
+PREFIX=/opt/oblong/g-speak5.1
+
+# G_SPEAK_HOME is the directory where the g-speak SDK we link against is found.
+# To change the project to link against e.g. g-speak 3.28, do e.g.
+#   ob-set-defaults --g-speak 3.28
+G_SPEAK_HOME=/opt/oblong/g-speak5.1
+
+# YOBUILD is where updated system-y libraries for this version of g-speak live.
+# ob-set-defaults sets this based on the g-speak version.
+YOBUILD=/opt/oblong/deps-64-13
+
+# Cmake options passed to ob-set-defaults (careful, quoting is treacherous here)
+CMAKE_GENERATOR=Ninja
+EXTRA_CMAKE_OPTIONS=
+
+# dh_strip needs a little help to know how to name the debug symbol package.
+# Dima's nifty debug package thingy
+# find all the ...-dbg packages, and use dh_strip to separate out their debug symbols into the debug package.
+# Two passes. First does all the -dbg, second does everything else
+STRIP_INTO_DBG = perl -e '    \
+  $$/ = undef;                \
+  @p = <> =~ /^Package:\s*(\S+)/mg;  \
+  $$h{$$_} = 1 for(@p);       \
+  for ( @p )                  \
+  {                           \
+    if( /(.*)-dbg/ )          \
+    {                         \
+      system( "dh_strip -p $$1 --dbg-package=$$_" ); \
+      delete $$h{$$1};        \
+      delete $$h{$$_};        \
+    }                         \
+  }                           \
+  for ( @p )                  \
+  {                           \
+    if( $$h{$$_} )            \
+    {                         \
+      system( "dh_strip -p $$_" ); \
+    }                         \
+  }'
+override_dh_strip:
+	$(STRIP_INTO_DBG) debian/control
+
+# Enable lines like the following if this package installs services
+## This package installs a service named 'oblong-hello'
+#
+#override_dh_systemd_enable:
+#	dh_systemd_enable --name oblong-hello
+#
+#override_dh_systemd_start:
+#	dh_systemd_start --no-start --name oblong-hello
+#
+#override_dh_installinit:
+#	dh_installinit --name oblong-hello
+
+#--- End lines edited by ob-set-defaults
+
+# Remainder of file should be completely generic to any
+# project using cmake, and not contain any project-dependent
+# or version-dependent info at all (except possibly PATH or LD_LIBRARY_PATH)
+
+# Uncomment this to turn on verbose mode.
+#export DH_VERBOSE=1
+
+# Sense OS major version
+OS_MAJOR := $(shell awk -F= '/VERSION_ID/ {print $$2}' < /etc/os-release | tr -d '"' | cut -d. -f1)
+# Assume this is ubuntu, and systemd is used on 15.04 and up
+OS_USES_SYSTEMD := $(shell if test $(OS_MAJOR) -ge 15; then echo 1; else echo 0; fi)
+# If this is a systemd system, pass --with=systemd to dh
+# (odd that one has to do this, but oh well)
+ifeq ($(OS_USES_SYSTEMD),1)
+WITH_SYSTEMD := --with=systemd
+endif
+
+# BTMP is where to put the build tree; use dh's default
+DEB_BUILD_GNU_TYPE := $(shell dpkg-architecture -qDEB_BUILD_GNU_TYPE)
+BTMP=$(CURDIR)/obj-$(DEB_BUILD_GNU_TYPE)
+
+# Make sure we can find cmake even if it's in yobuild
+PATH:=$(YOBUILD)/bin:$(PATH)
+export PATH
+
+# The central, all-powerful debhelper make rule (Thanks, Joey!)
+%:
+	dh $@ --parallel --buildsystem=cmake $(WITH_SYSTEMD)
+
+override_dh_auto_configure:
+	if test -f CMakeLists.txt; then \
+		dh_auto_configure -- -DCMAKE_INSTALL_PREFIX=$(PREFIX) -G "$(CMAKE_GENERATOR)" $(EXTRA_CMAKE_OPTIONS); \
+	elif test -f meson.build; then \
+		PKG_CONFIG_PATH="$(G_SPEAK_HOME)/lib/pkgconfig:/usr/share/pkgconfig:$(YOBUILD)/lib/pkgconfig:$(YOBUILD)/share/pkgconfig" \
+		meson --prefix "$(PREFIX)" . $(BTMP); \
+	elif test -f Makefile; then \
+		echo "No configure needed?"; \
+	fi
+
+# dh doesn't quite support other cmake generators than the default,
+# so use cmake --build.  Have to jump through a hoop or two to
+# pass debuild's -j4 parameter through!
+ifneq (,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+NUMJOBS = $(patsubst parallel=%,%,$(filter parallel=%,$(DEB_BUILD_OPTIONS)))
+BUILDFLAGS := -j$(NUMJOBS)
+else
+BUILDFLAGS :=
+endif
+override_dh_auto_build:
+	if test -f CMakeLists.txt; then \
+		cd "$(BTMP)"; cmake --build . -- $(BUILDFLAGS); \
+	elif test -f meson.build; then \
+		cd "$(BTMP)"; ninja; \
+	elif test -f Makefile; then \
+		cd "$(BTMP)"; make; \
+	fi
+
+# Likewise, jump through a hoop to get 'dh install' to use cmake --build.
+DESTDIR=$(CURDIR)/debian/tmp
+override_dh_auto_install:
+	if test -f CMakeLists.txt; then \
+		cd "$(BTMP)"; DESTDIR="$(DESTDIR)" cmake --build . --target install; \
+	elif test -f meson.build; then \
+		cd "$(BTMP)"; DESTDIR="$(DESTDIR)" ninja install; \
+	elif test -f Makefile; then \
+		cd "$(BTMP)"; DESTDIR="$(DESTDIR)" make install; \
+	fi
+
+# Likewise, jump through a hoop to get 'dh check' to use ctest -V
+# and also obey DEB_BUILD_OPTIONS=nocheck.
+override_dh_auto_test:
+	if ! echo "$$DEB_BUILD_OPTIONS" | grep nocheck; then \
+		if test -f CMakeLists.txt; then \
+			cd "$(BTMP)"; ctest -V; \
+		elif test -f meson.build; then \
+			cd "$(BTMP)"; ninja test; \
+		elif test -f Makefile; then \
+			cd "$(BTMP)"; make check; \
+		fi; \
+	fi
+
+# Tell shlibdeps where our shared libraries are.
+# It runs after override_dh_auto_install, so installed files already have the final RPATH
+# (presumably $(PREFIX)/lib:$(YOBUILD)/lib); we only need to add $(DESTDIR)$(PREFIX)/lib.
+# Once ubuntu 12.04 is dead and buried, we should use the -l option to dh_shlibdeps;
+# until then, prepend to LD_LIBRARY_PATH.  See https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=698881
+# (LD_LIBRARY_PATH is not empty, as this is run under fakeroot, so no need to worry about CVE-2010-3353.)
+# Note 1:
+# debian/rules is a makefile that invokes itself recursively, so prepending directly
+# to LD_LIBRARY_PATH here would cause duplication... and on ubuntu 15.10, build failure.
+# So let's prepend to LD_LIBRARY_PATH late in the shell using env, rather than early in make.
+# Note 2:
+# On misconfigured headless systems, libGL.so may be missing, which has caused us grief in the past.
+# We used to pass the --ignore-missing-info option to dh_shlibdeps to work around that, but
+# let's not do that unless we need to.
+#
+# Also, if SOURCE_DATE_EPOCH is set (as it is on Ubuntu 16.04), use
+# that timestamp for all installed files.  That makes it easier to
+# compare built packages with diffoscope to find real differences;
+# see https://reproducible-builds.org/ and https://bugs.oblong.com/show_bug.cgi?id=13955
+# FIXME: remove this once ubuntu's debhelper does this by default.
+
+override_dh_shlibdeps:
+	env LD_LIBRARY_PATH="$(DESTDIR)$(PREFIX)/lib:$${LD_LIBRARY_PATH}" \
+	dh_shlibdeps --
+	if test "$$SOURCE_DATE_EPOCH"; then find debian/*/opt debian/*/usr -print0 | xargs -0 touch -h -d @$$SOURCE_DATE_EPOCH; fi
