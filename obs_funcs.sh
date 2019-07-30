@@ -101,6 +101,7 @@ bs_detect_os() {
         # Except that OS X 10.9 has a different Ruby ABI,
         # and we've decided to use XCode 4 on 10.7/10.8 vs.
         # XCode 5 on 10.9, so osx107 vs. osx109 here implies libstdc++ vs. libc++.
+        10.15|10.15.*) echo osx1015;;
         10.14|10.14.*) echo osx1014;;
         10.13|10.13.*) echo osx1013;;
         10.12|10.12.*) echo osx1012;;
