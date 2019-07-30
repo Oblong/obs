@@ -46,8 +46,9 @@ then
     # FIXME: finish transition to python 3, using brew.
     # The only argument for not using brew python is it would prevent
     # shipping system python2 bindings for our native libraries.
-    PATH="$PATH:$HOME/Library/Python/2.7/bin"
-    which pip
+    #PATH="$PATH:$HOME/Library/Python/2.7/bin"
+    which pip || true
+    which pip3 || true
 
     # caffeinate's assertions only last 15 seconds regardless of -t,
     # so reissue constantly.

@@ -181,12 +181,14 @@ do_init_www() {
 
     # Arrange for isolated uploads to OB_DUMPER_HOST to work
     # (e.g. "scp foo.bar ${OB_DUMPER_HOST}:/ob/dumper/blah" )
+    # NOTE: this won't work on osx1013 and later, so ignore failures
+    # FIXME: probably want to remove it?
     mkdir -p ~/var/dumper
     if ! test -d /ob
     then
-        $SUDO mkdir /ob
+        $SUDO mkdir /ob || true
     fi
-    $SUDO ln -sf ~/var/dumper /ob
+    $SUDO ln -sf ~/var/dumper /ob || true
 
     # Arrange for isolated downloads from OB_DUMPER_HOST to work
     # (e.g. "wget http://$OB_DUMPER_HOST/blah/foo.bar" )
