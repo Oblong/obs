@@ -178,34 +178,68 @@ do_patch() {
 
 do_configure() {
   # cmake now finds FindOblong.cmake via PATH
-  PATH="$(bs_get_gspeak_home)/bin:$PATH"
+  local G_SPEAK_HOME="$(bs_get_gspeak_home)"
+  PATH="${G_SPEAK_HOME}/bin:$PATH"
+  YOBUILDHOME="$(bs_get_yobuild_home)"
 
   # Note: this is an incremental configure.  Do 'bau clean' if you want clean start.
   mkdir -p "$btmp"
   cd "$btmp"
-  cmake \
-    -G"$(bs_get_cmake_generator_with_default)" \
-    $(bs_get_cmake_options) \
-    -DCMAKE_INSTALL_PREFIX="$(bs_get_prefix)" \
-    ..
+  if test -f ../meson.build
+  then
+    # FIXME: include archlib?
+    export PKG_CONFIG_PATH=${G_SPEAK_HOME}/lib/pkgconfig:${YOBUILDHOME}/lib/pkgconfig
+    # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
+    export BOOST_ROOT=${YOBUILDHOME}
+    # FIXME: handle more options
+    meson setup --prefix "$(bs_get_prefix)" .. .
+  elif test -f ../CMakeLists.txt
+  then
+    cmake \
+      -G"$(bs_get_cmake_generator_with_default)" \
+      $(bs_get_cmake_options) \
+      -DCMAKE_INSTALL_PREFIX="$(bs_get_prefix)" \
+      ..
+  else
+    bs_abort "configure: neither CMakeLists.txt nor meson.build found"
+  fi
 }
 
 do_compile() {
   cd "$btmp"
   # bau (well, bs_pkg_init in bs_funcs.sh) sets $ncores to 4 or whatever
-  case "$(bs_get_cmake_generator_with_default)" in
-  Xcode) parallel=IDEBuildOperationMaxNumberOfConcurrentCompileTasks=$ncores;;
-  *) parallel=-j$ncores;;
-  esac
-  cmake --build . -- $parallel
+  if test -f ../meson.build
+  then
+    ninja -v
+  elif test -f ../CMakeLists.txt
+  then
+    case "$(bs_get_cmake_generator_with_default)" in
+    Xcode) parallel=IDEBuildOperationMaxNumberOfConcurrentCompileTasks=$ncores;;
+    *) parallel=-j$ncores;;
+    esac
+    cmake --build . -- $parallel
+  else
+    bs_abort "compile: neither CMakeLists.txt nor meson.build found"
+  fi
 }
 
 do_check() {
   bs_test_env_setup
   cd "$btmp"
-  if ! ctest -V $BS_CTEST_EXTRA
+  if test -f ../meson.build
   then
+    if ! ninja test
+    then
       bs_abort "Test failed"
+    fi
+  elif test -f ../CMakeLists.txt
+  then
+    if ! ctest -V $BS_CTEST_EXTRA
+    then
+      bs_abort "Test failed"
+    fi
+  else
+    bs_abort "check: neither CMakeLists.txt nor meson.build found"
   fi
   cd ..
   bs_test_env_teardown
@@ -219,7 +253,15 @@ do_package() {
   rm -rf ../pkgtmp || true
   mkdir ../pkgtmp
   DESTDIR=$(cd ../pkgtmp; pwd)
-  DESTDIR=$DESTDIR cmake --build . --target install
+  if test -f ../meson.build
+  then
+    DESTDIR=$DESTDIR ninja -v install
+  elif test -f ../CMakeLists.txt
+  then
+    DESTDIR=$DESTDIR cmake --build . --target install
+  else
+    bs_abort "package: neither CMakeLists.txt nor meson.build found"
+  fi
   cd ../pkgtmp
   tarball=../"$pkgname-$version-$version_patchnum".tar.gz
   # Alas, fakeroot sh -c "cmd1; cmd2" is not reliable, so make a shell script.

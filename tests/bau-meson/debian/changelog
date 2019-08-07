@@ -1,0 +1,5 @@
+pcredemo (1.0) xenial; urgency=low
+
+  * initial native debian packaging
+
+ -- Dan Kegel <dank@oblong.com>  Thu, 25 Jul 2019 06:15:51 -0700

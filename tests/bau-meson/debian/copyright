@@ -1,0 +1,8 @@
+Format-Specification: http://svn.debian.org/wsvn/dep/web/deps/dep5.mdwn?op=file&rev=135
+Maintainer: buildtools <buildtools@oblong.com>
+Source: Oblong git repo
+Name: Oblong
+
+Files: *
+Copyright: 2019 Oblong Industries
+License: Proprietary

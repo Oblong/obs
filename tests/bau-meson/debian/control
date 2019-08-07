@@ -1,0 +1,13 @@
+Source: pcredemo
+Section: non-free/misc
+Priority: extra
+Maintainer: buildtools <buildtools@oblong.com>
+Build-Depends: debhelper (>= 7),
+   build-essential,
+   libpcre3-dev,
+Standards-Version: 3.8.3
+
+Package: pcredemo
+Architecture: any
+Depends: ${misc:Depends},
+Description: Test program for libpcre
