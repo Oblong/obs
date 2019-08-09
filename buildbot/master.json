@@ -3287,37 +3287,6 @@
         },
         {
             "category" : "mezzanine",
-            "name"      : "build-utils",
-            "repourl"   : "git@gitlab.oblong.com:mezzanine/build-utils.git",
-            "builders"  : [
-                { "os":"ubu1604", "branch":"master"              },
-                { "os":"ubu1604", "branch":"master", "try":"yes" },
-                { "os":"ubu1804", "branch":"master"              },
-                { "os":"ubu1804", "branch":"master", "try":"yes" }
-            ]
-        },
-        {
-            "category" : "mezzanine",
-            "name"      : "ziggy",
-            "repourl"   : "git@gitlab.oblong.com:mezzanine/ziggy.git",
-            "builders"  : [
-                { "os":"ubu1604", "branch":"master"              },
-                { "os":"ubu1604", "branch":"master", "try":"yes" },
-                { "os":"ubu1804", "branch":"master"              },
-                { "os":"ubu1804", "branch":"master", "try":"yes" }
-            ]
-        },
-        {
-            "category" : "mezzanine",
-            "name"      : "ob-vagrant",
-            "repourl"   : "git@gitlab.oblong.com:mezzanine/ob-vagrant.git",
-            "builders"  : [
-                { "os":"ubu1804", "branch":"master"              },
-                { "os":"ubu1804", "branch":"master", "try":"yes" }
-            ]
-        },
-        {
-            "category" : "mezzanine",
             "name"      : "mzproto",
             "repourl"   : "git@gitlab.oblong.com:mezzanine/mzproto.git",
             "builders"  : [
@@ -3375,8 +3344,6 @@
             "name"      : "oblong-sedutil",
             "repourl"   : "git@gitlab.oblong.com:mezzanine/oblong-sedutil.git",
             "builders"  : [
-                { "os":"ubu1604", "branch":"master"              },
-                { "os":"ubu1604", "branch":"master", "try":"yes" },
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" }
             ]
@@ -3386,8 +3353,6 @@
             "name"      : "oblong-weave",
             "repourl"   : "git@gitlab.oblong.com:mezzanine/oblong-weave.git",
             "builders"  : [
-                { "os":"ubu1604", "branch":"master"              },
-                { "os":"ubu1604", "branch":"master", "try":"yes" },
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" }
             ]
@@ -3397,7 +3362,6 @@
             "name"     : "perception-image",
             "repourl"  : "git@gitlab.oblong.com:mezzanine/perception-image.git",
             "builders" : [
-                { "os":"ubu1604", "branch":"master" },
                 { "os":"ubu1804", "branch":"master" }
             ]
         },
@@ -3406,7 +3370,6 @@
             "name"     : "mezzanine-image",
             "repourl"  : "git@gitlab.oblong.com:mezzanine/mezzanine-image.git",
             "builders" : [
-                { "os":"ubu1604", "branch":"master" },
                 { "os":"ubu1804", "branch":"master" }
             ]
         },
@@ -3417,9 +3380,8 @@
             "repourl"  : "git@gitlab.oblong.com:mezzanine/mezzanine-kipple.git",
             "comment"  : "--g-speak must match that used by mezzanine for this OS as it installs to $G_SPEAK_HOME but lacks g-speak version in pkg name",
             "builders" : [
-                { "os" : "ubu1604",           "branch"  : "master"                },
-                { "os" : "ubu1604",           "branch"  : "master", "try" : "yes" },
-                { "os" : "ubu1804",           "branch"  : "master"                }
+                { "os" : "ubu1804",           "branch"  : "master"                },
+                { "os" : "ubu1804",           "branch"  : "master", "try" : "yes" }
             ]
         },
         {
@@ -3428,8 +3390,6 @@
             "homepage" : "https://wiki.oblong.com/post/main/0BGpE8Wap53Mja5n",
             "repourl"  : "git@gitlab.oblong.com:mezzanine/mezzanine.git",
             "builders" : [
-                { "os" : "ubu1604",           "branch"  : "mz"                    },
-                { "os" : "ubu1604",           "branch"  : "mz",       "try":"yes" },
                 { "os" : "ubu1804",           "branch"  : "mz"                    },
                 { "os" : "ubu1804",           "branch"  : "mz",       "params":"--asan --debug --no-publish", "suffix":"-asan"              },
                 { "os" : "ubu1804",           "branch"  : "mz",       "params":"--asan --debug",              "suffix":"-asan", "try":"yes" },
@@ -3441,14 +3401,6 @@
             "name"     : "mezzanine-bridge-client",
             "repourl"  : "git@gitlab.oblong.com:mezzanine/mezzanine-bridge-client.git",
             "builders" : [
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs4.4",  "params":"--g-speak 4.4"                 },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs4.4",  "params":"--g-speak 4.4",  "try" : "yes" },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs4.6",  "params":"--g-speak 4.6"                 },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs4.6",  "params":"--g-speak 4.6",  "try" : "yes" },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs4.8",  "params":"--g-speak 4.8"                 },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs4.8",  "params":"--g-speak 4.8",  "try" : "yes" },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs5.0",  "params":"--g-speak 5.0"                 },
-                { "os" : "ubu1604", "branch" : "master", "suffix":"gs5.0",  "params":"--g-speak 5.0",  "try" : "yes" },
                 { "os" : "ubu1804", "branch" : "master", "suffix":"gs4.6",  "params":"--g-speak 4.6"                 },
                 { "os" : "ubu1804", "branch" : "master", "suffix":"gs4.6",  "params":"--g-speak 4.6",  "try" : "yes" },
                 { "os" : "ubu1804", "branch" : "master", "suffix":"gs4.8",  "params":"--g-speak 4.8"                 },
@@ -3462,8 +3414,6 @@
             "name"     : "mezzanine-web",
             "repourl"  : "git@gitlab.oblong.com:mezzanine/mezzanine-web.git",
             "builders" : [
-                {"os" : "ubu1604", "branch"  : "master"                       },
-                {"os" : "ubu1604", "branch"  : "master", "try" : "yes"        },
                 {"os" : "ubu1804", "branch"  : "master"                       },
                 {"os" : "ubu1804", "branch"  : "master", "try" : "yes"        }
             ]
@@ -3473,8 +3423,6 @@
             "name"     : "mip",
             "repourl"  : "git@gitlab.oblong.com:mezzanine/mip.git",
             "builders" : [
-                {"os" : "ubu1604", "branch"  : "master"                       },
-                {"os" : "ubu1604", "branch"  : "master", "try" : "yes"        },
                 {"os" : "ubu1804", "branch"  : "master"                       },
                 {"os" : "ubu1804", "branch"  : "master", "try" : "yes"        }
             ]
@@ -3486,8 +3434,6 @@
             "builders" : [
                 { "os":"osx1010", "branch"  : "master"                        },
                 { "os":"osx1010", "branch"  : "master", "try":"yes"           },
-                { "os":"ubu1604", "branch"  : "master"                        },
-                { "os":"ubu1604", "branch"  : "master", "try":"yes"           },
                 { "os":"win7key", "branch"  : "master"                        },
                 { "os":"win7key", "branch"  : "master", "try":"yes"           }
             ]
@@ -3497,8 +3443,6 @@
             "name"      : "rubygem-mezzanine-samltools",
             "repourl"   : "git@gitlab.oblong.com:mezzanine/rubygem-mezzanine-samltools.git",
             "builders"  : [
-                {"os":"ubu1604", "branch":"master"              },
-                {"os":"ubu1604", "branch":"master", "try":"yes" },
                 {"os":"ubu1804", "branch":"master"              },
                 {"os":"ubu1804", "branch":"master", "try":"yes" }
             ]
@@ -3508,8 +3452,6 @@
             "name"      : "mz-config-parser",
             "repourl"   : "git@gitlab.oblong.com:mezzanine/mz-config-parser.git",
             "builders"  : [
-                {"os":"ubu1604", "branch":"master"              },
-                {"os":"ubu1604", "branch":"master", "try":"yes" },
                 {"os":"ubu1804", "branch":"master"              },
                 {"os":"ubu1804", "branch":"master", "try":"yes" }
             ]
