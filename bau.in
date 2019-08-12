@@ -152,7 +152,19 @@ else
         bs_abort "bau: bug: totally failed to find old or new buildshim."
     fi
 fi
-echo "bau: using buildshim $BAU_SHIM" >&2
+
+if test "$BAU_CMD" != list
+then
+  echo " " >&2
+  echo "==============================" >&2
+  echo "bau: step $BAU_CMD on machine $(hostname) in dir $(pwd)" >&2
+  echo "bau: using buildshim $BAU_SHIM" >&2
+  case $_os in
+  osx*|ubu*) echo "bau: uptime: $(uptime)" >&2;;
+  win*)      echo "bau: loadpercentage: $(wmic cpu get loadpercentage)" >&2;;
+  esac
+fi
+
 . "$BAU_SHIM"
 
 do_do_list() {
