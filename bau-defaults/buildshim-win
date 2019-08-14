@@ -188,7 +188,8 @@ do_patch() {
 #-- begin really windows specific cruft --
 # Build up path next to code that knows how to install each tool.  Bit ugly, what?
 
-PATH="/cygdrive/c/Program Files/CMake/bin:$PATH"
+PATH="$DRIVEC/Program Files (x86)/CMake/bin:$DRIVEC/Program Files/CMake/bin:$PATH"
+
 install_cmake() {
   cm="$(which cmake)" || true
   case "$cm" in
@@ -293,6 +294,8 @@ do_configure() {
   # Note: CMAKE_INSTALL_PREFIX is a path without drive letter,
   # relative to c:, using unix slashes instead of backslashes.
   # This makes it easier to use with DESTDIR during do_package.
+  # Note 2: that trick doesn't seem to work in msys, even with real cmake;
+  # it treats path as relative to msys /, i.e. Program Files/Git.
   cmake \
     -G"$(bs_get_cmake_generator)" \
     $(bs_get_cmake_options) \
@@ -320,6 +323,7 @@ do_check() {
       return 0
   fi
 
+  bs_vcvars $bits
   bs_test_env_setup
   cd "$btmp-$buildtype"
   ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
@@ -335,7 +339,10 @@ do_package() {
   bs_vcvars $bits
   rm -rf pkgtmp
   mkdir pkgtmp
-  export DESTDIR=$(cmd /c cd | tr -d '\015\012')/pkgtmp
+  case $_os in
+  cygwin) export DESTDIR=$(cmd /c cd | tr -d '\015\012')/pkgtmp;;
+  mingw) export DESTDIR=$(cmd //c cd | tr -d '\015\012')/pkgtmp;;
+  esac
   (
      cd "$btmp-$buildtype"
      cmake --build . --config $buildtype --target install
@@ -604,7 +611,7 @@ bs_test_env_setup() {
 
   # Make sure this g-speak is on PATH at all, and is found before any others,
   # else cmake won't find our OblongConfig.cmake.
-  PATH="/cygdrive/c/$(bs_get_gspeak_home)/bin:$PATH"
+  PATH="${DRIVEC}/$(bs_get_gspeak_home)/bin:$PATH"
 }
 
 bs_test_env_teardown() {
@@ -644,7 +651,7 @@ bits=$(getconf LONG_BIT)
 
 # Pick up any tools we need from yobuild
 # FIXME: this'll be wrong if yoversion changes during 'bau all'
-if YOBUILDHOME="/cygdrive/c/$(bs_get_yobuild_home)"
+if YOBUILDHOME="${DRIVEC}/$(bs_get_yobuild_home)"
 then
     PATH="$YOBUILDHOME/bin:$PATH"
 fi

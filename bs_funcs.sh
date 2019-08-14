@@ -127,6 +127,13 @@ bs_platform_workarounds() {
     *) SUDO="sudo GNUPGHOME=$GNUPGHOME APT_CONFIG=$APT_CONFIG"
         ;;
     esac
+
+    DRIVEC=/wrong/os
+    case $_os in
+    cygwin) DRIVEC=/cygdrive/c/;;
+    mingw) DRIVEC=/c;;
+    esac
+
     case $_os in
     cygwin)
         # Get access to batch files next to the main script
@@ -456,7 +463,43 @@ bs_msvc2017_64_defaults() {
     export INCLUDE='C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\include;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\include;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\ucrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\shared;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\um;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\winrt;C:\Program Files (x86)\Windows Kits\10\include\10.0.17763.0\cppwinrt'
     export LIB='C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\lib\x64;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x64;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\ucrt\x64;C:\Program Files (x86)\Windows Kits\10\lib\10.0.17763.0\um\x64;'
     export LIBPATH='C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\ATLMFC\lib\x64;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x64;C:\Program Files (x86)\Microsoft Visual Studio\2017\Community\VC\Tools\MSVC\14.16.27023\lib\x86\store\references;C:\Program Files (x86)\Windows Kits\10\UnionMetadata\10.0.17763.0;C:\Program Files (x86)\Windows Kits\10\References\10.0.17763.0;C:\Windows\Microsoft.NET\Framework64\v4.0.30319;'
-    export ORIGINAL_PATH='/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/HostX64/x64:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/VC/VCPackages:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/bin/Roslyn:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Team Tools/Performance Tools/x64:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Team Tools/Performance Tools:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/Shared/Common/VSPerfCollectionTools/x64:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/Shared/Common/VSPerfCollectionTools:/cygdrive/c/Program Files (x86)/HTML Help Workshop:/cygdrive/c/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x64:/cygdrive/c/Program Files (x86)/Windows Kits/10/bin/x64:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/bin:/cygdrive/c/Windows/Microsoft.NET/Framework64/v4.0.30319:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/Tools:/cygdrive/c/Program Files/Python37/Scripts:/cygdrive/c/Program Files/Python37:/cygdrive/c/Perl64/site/bin:/cygdrive/c/Perl64/bin:/cygdrive/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/iCLS:/cygdrive/c/Program Files/Intel/Intel(R) Management Engine Components/iCLS:/cygdrive/c/Windows/system32:/cygdrive/c/Windows:/cygdrive/c/Windows/System32/Wbem:/cygdrive/c/Windows/System32/WindowsPowerShell/v1.0:/cygdrive/c/Windows/System32/OpenSSH:/cygdrive/c/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:/cygdrive/c/Program Files/Intel/Intel(R) Management Engine Components/DAL:/cygdrive/c/Program Files/CMake/bin:/cygdrive/c/Program Files/Git/cmd:/cygdrive/c/opt/ninja:/cygdrive/c/Ruby24-x64/bin:/cygdrive/c/Users/buildbot/AppData/Local/Microsoft/WindowsApps:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin:/cygdrive/c/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja'
+    export ORIGINAL_PATH="\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/VC/Tools/MSVC/14.16.27023/bin/HostX64/x64:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/VC/VCPackages:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/TestWindow:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/TeamFoundation/Team Explorer:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/bin/Roslyn:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Team Tools/Performance Tools/x64:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Team Tools/Performance Tools:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/Shared/Common/VSPerfCollectionTools/x64:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/Shared/Common/VSPerfCollectionTools:\
+$DRIVEC/Program Files (x86)/HTML Help Workshop:\
+$DRIVEC/Program Files (x86)/Windows Kits/10/bin/10.0.17763.0/x64:\
+$DRIVEC/Program Files (x86)/Windows Kits/10/bin/x64:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/MSBuild/15.0/bin:\
+$DRIVEC/Windows/Microsoft.NET/Framework64/v4.0.30319:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/Tools:\
+$DRIVEC/Program Files/Python37/Scripts:\
+$DRIVEC/Program Files/Python37:\
+$DRIVEC/Perl64/site/bin:\
+$DRIVEC/Perl64/bin:\
+$DRIVEC/Program Files (x86)/Intel/Intel(R) Management Engine Components/iCLS:\
+$DRIVEC/Program Files/Intel/Intel(R) Management Engine Components/iCLS:\
+$DRIVEC/Windows/system32:\
+$DRIVEC/Windows:\
+$DRIVEC/Windows/System32/Wbem:\
+$DRIVEC/Windows/System32/WindowsPowerShell/v1.0:\
+$DRIVEC/Windows/System32/OpenSSH:\
+$DRIVEC/Program Files (x86)/Intel/Intel(R) Management Engine Components/DAL:\
+$DRIVEC/Program Files/Intel/Intel(R) Management Engine Components/DAL:\
+$DRIVEC/Program Files/CMake/bin:\
+$DRIVEC/Program Files/Git/cmd:\
+$DRIVEC/opt/ninja:\
+$DRIVEC/Ruby24-x64/bin:\
+$DRIVEC/Users/buildbot/AppData/Local/Microsoft/WindowsApps:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/CMake/bin:\
+$DRIVEC/Program Files (x86)/Microsoft Visual Studio/2017/Community/Common7/IDE/CommonExtensions/Microsoft/CMake/Ninja"
     # Careful, if user put a special directory on path ahead of /bin, preserve that
     export PATH="${ORIGINAL_PATH}:$PATH"
     export Platform='x64'
@@ -507,7 +550,7 @@ bs_vcvars32() {
         esac
         ;;
     esac
-    if ! yes | cl /help > /dev/null 2>&1
+    if ! yes | cl /? > /dev/null 2>&1
     then
         bs_abort "Cannot run visual c++"
     fi
@@ -529,7 +572,7 @@ bs_vcvars64() {
         esac
         ;;
     esac
-    if ! yes | cl /help > /dev/null 2>&1
+    if ! yes | cl /? > /dev/null 2>&1
     then
         bs_abort "Cannot run visual c++"
     fi

@@ -73,7 +73,7 @@ BAU_BIN="$(cd "$BAU_BIN"; pwd)"
 # up before virtualenv's pip.  Putting it last may leave a stale obs active.
 # Let's try putting it last to see how bad that is in practice.
 # Turns out it makes passing tests hard on Ubuntu, so:
-if test -d /Library && ! test -d /cygdrive/c/Users
+if test -d /Library && ! test -d /cygdrive/c/Users && ! test -d /c/Users
 then
    PATH="${PATH}:${BAU_BIN}"
 else
