@@ -242,7 +242,10 @@ do_install_deps_base() {
   local yobuild
   yobuild="/cygdrive/c/$(bs_get_yobuild_home)"
 
-  install_cmake
+  if test -f CMakeLists.txt
+  then
+     install_cmake
+  fi
   install_pkg_config
   install_ruby
   zip --version > /dev/null || apt-cyg install zip
@@ -285,7 +288,6 @@ do_configure() {
   bs_vcvars $bits
 
   mkdir -p "$btmp-$buildtype"
-  cd "$btmp-$buildtype"
 
   # Set CC, CXX, else ninja generator tries to use cc.exe.
   export CC=cl.exe
@@ -296,12 +298,18 @@ do_configure() {
   # This makes it easier to use with DESTDIR during do_package.
   # Note 2: that trick doesn't seem to work in msys, even with real cmake;
   # it treats path as relative to msys /, i.e. Program Files/Git.
-  cmake \
+  if test -f meson.build
+  then
+    meson "$btmp-$buildtype"
+  else
+    cd "$btmp-$buildtype"
+    cmake \
     -G"$(bs_get_cmake_generator)" \
     $(bs_get_cmake_options) \
     -DCMAKE_BUILD_TYPE=${buildtype} \
     -DCMAKE_INSTALL_PREFIX="$(bs_get_prefix)" \
     "$origdirw"
+  fi
 }
 
 do_compile() {
@@ -309,8 +317,13 @@ do_compile() {
   buildtype="$(bs_get_cmake_buildtype)"
 
   bs_vcvars $bits
-  cd "$btmp-$buildtype"
-  cmake --build . --config $buildtype
+  if test -f meson.build
+  then
+    ninja -C "btmp-$buildtype"
+  else
+    cd "$btmp-$buildtype"
+    cmake --build . --config $buildtype
+  fi
 }
 
 do_check() {
@@ -325,8 +338,13 @@ do_check() {
 
   bs_vcvars $bits
   bs_test_env_setup
-  cd "$btmp-$buildtype"
-  ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+  if test -f meson.build
+  then
+    ninja -C "btmp-$buildtype" test
+  else
+    cd "$btmp-$buildtype"
+    ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+  fi
   bs_test_env_teardown
 }
 
@@ -343,10 +361,15 @@ do_package() {
   cygwin) export DESTDIR=$(cmd /c cd | tr -d '\015\012')/pkgtmp;;
   mingw) export DESTDIR=$(cmd //c cd | tr -d '\015\012')/pkgtmp;;
   esac
+  if test -f meson.build
+  then
+    ninja -C "btmp-$buildtype" install
+  else
   (
      cd "$btmp-$buildtype"
      cmake --build . --config $buildtype --target install
   )
+  fi
   rm -f "$pkgname-$buildtype-$version-$version_patchnum".tar.gz
   cd pkgtmp
   # Must specify location of tar to avoid getting broken one from windows/system32
