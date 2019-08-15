@@ -188,11 +188,14 @@ do_patch() {
 #-- begin really windows specific cruft --
 # Build up path next to code that knows how to install each tool.  Bit ugly, what?
 
-PATH="/cygdrive/c/Program Files/CMake/bin:$PATH"
+PATH="$DRIVEC/Program Files (x86)/CMake/bin:$DRIVEC/Program Files/CMake/bin:$PATH"
+
 install_cmake() {
   cm="$(which cmake)" || true
   case "$cm" in
   *cygdrive*)
+    ;;
+  /c/Program*CMake*)
     ;;
   /usr/local/bin/cmake|/usr/bin/cmake|/bin/cmake)
     bs_abort "cygwin cmake does not support generating for visual c++"
@@ -200,36 +203,36 @@ install_cmake() {
   "")
     # random old version we used at one point
     scp git.oblong.com:/ob/buildtools/software/cmake/cmake-3.9.4-win64-x64.msi .
-    cmd /c msiexec /i cmake-3.9.4-win64.msi /qn
+    cmd $MSYS_ESC/c msiexec /i cmake-3.9.4-win64.msi /qn
     ;;
   *) bs_abort "huh? cmake is ${cm}?";;
   esac
 }
 
-PATH="/cygdrive/c/pkg-config-lite/bin:$PATH"
+PATH="$DRIVEC/pkg-config-lite/bin:$PATH"
 install_pkg_config() {
   # FIXME: include pkgconf in windows yobuild, then remove pkg-config-lite
-  if ! test -d /cygdrive/c/pkg-config-lite
+  if ! test -d $DRIVEC/pkg-config-lite
   then
     # random old version we started with
     rm -rf pkg-config-lite-0.28-1
     scp git.oblong.com:/ob/buildtools/software/pkg-config-lite-0.28-1_bin-win32.zip .
     unzip pkg-config-lite-0.28-1_bin-win32.zip
-    mkdir -p /cygdrive/c/pkg-config-lite/bin
-    cp -a pkg-config-lite-0.28-1/bin/pkg-config.exe /cygdrive/c/pkg-config-lite/bin
-    chmod +x /cygdrive/c/pkg-config-lite/bin/pkg-config.exe
+    mkdir -p $DRIVEC/pkg-config-lite/bin
+    cp -a pkg-config-lite-0.28-1/bin/pkg-config.exe $DRIVEC/pkg-config-lite/bin
+    chmod +x $DRIVEC/pkg-config-lite/bin/pkg-config.exe
     rm -rf pkg-config-lite-0.28-1
   fi
 }
 
-PATH="/cygdrive/c/Ruby24-x64/bin:$PATH"
+PATH="$DRIVEC/Ruby24-x64/bin:$PATH"
 install_ruby() {
-  if ! test -d /cygdrive/c/Ruby24-x64
+  if ! test -d $DRIVEC/Ruby24-x64
   then
     # latest ruby as of this writing
     scp git.oblong.com:/ob/dumper/windows/rubyinstaller-2.4.2-2-x64.exe .
     chmod +x rubyinstaller-2.4.2-2-x64.exe
-    cmd /c rubyinstaller-2.4.2-2-x64.exe /verysilent
+    cmd $MSYS_ESC/c rubyinstaller-2.4.2-2-x64.exe $MSYS_ESC/verysilent
   fi
 }
 
@@ -239,9 +242,12 @@ do_install_deps_base() {
   local yoversion
   yoversion="$(bs_get_yoversion)"
   local yobuild
-  yobuild="/cygdrive/c/$(bs_get_yobuild_home)"
+  yobuild="$DRIVEC/$(bs_get_yobuild_home)"
 
-  install_cmake
+  if test -f CMakeLists.txt
+  then
+     install_cmake
+  fi
   install_pkg_config
   install_ruby
   zip --version > /dev/null || apt-cyg install zip
@@ -276,15 +282,24 @@ do_install_deps() {
 #-- end really windows specific cruft --
 
 do_configure() {
-  # cmake now finds FindOblong.cmake via PATH
-  PATH="/cygdrive/c/$(bs_get_gspeak_home)/bin:$PATH"
+  local PREFIX="$(bs_get_prefix)"
+  local G_SPEAK_HOME="$(bs_get_gspeak_home)"
 
+  # cmake now finds FindOblong.cmake via PATH
+  PATH="$DRIVEC/${G_SPEAK_HOME}/bin:$PATH"
+
+  # Alas, PKG_CONFIG_PATH must use windows drive letters and semicolon separators,
+  # else win10 treats it as msys paths!
+  export "PKG_CONFIG_PATH=c:${G_SPEAK_HOME}/lib/pkgconfig;c:${YOBUILDHOME}/lib/pkgconfig"
+  if test "$PREFIX" != "$G_SPEAK_HOME" && test "$PREFIX" != "$YOBUILDHOME"
+  then
+      PKG_CONFIG_PATH="${PKG_CONFIG_PATH};c:${PREFIX}/lib/pkgconfig"
+  fi
   local buildtype
   buildtype="$(bs_get_cmake_buildtype)"
   bs_vcvars $bits
 
   mkdir -p "$btmp-$buildtype"
-  cd "$btmp-$buildtype"
 
   # Set CC, CXX, else ninja generator tries to use cc.exe.
   export CC=cl.exe
@@ -293,12 +308,24 @@ do_configure() {
   # Note: CMAKE_INSTALL_PREFIX is a path without drive letter,
   # relative to c:, using unix slashes instead of backslashes.
   # This makes it easier to use with DESTDIR during do_package.
-  cmake \
+  # Note 2: that trick doesn't seem to work in msys, even with real cmake;
+  # it treats path as relative to msys /, i.e. Program Files/Git.
+  if test -f meson.build
+  then
+    # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
+    export BOOST_ROOT=${YOBUILDHOME}
+    # FIXME: handle more options
+    # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
+    meson setup --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
+  else
+    cd "$btmp-$buildtype"
+    cmake \
     -G"$(bs_get_cmake_generator)" \
     $(bs_get_cmake_options) \
     -DCMAKE_BUILD_TYPE=${buildtype} \
-    -DCMAKE_INSTALL_PREFIX="$(bs_get_prefix)" \
+    -DCMAKE_INSTALL_PREFIX="${PREFIX}" \
     "$origdirw"
+  fi
 }
 
 do_compile() {
@@ -306,8 +333,13 @@ do_compile() {
   buildtype="$(bs_get_cmake_buildtype)"
 
   bs_vcvars $bits
-  cd "$btmp-$buildtype"
-  cmake --build . --config $buildtype
+  if test -f meson.build
+  then
+    ninja -C "btmp-$buildtype"
+  else
+    cd "$btmp-$buildtype"
+    cmake --build . --config $buildtype
+  fi
 }
 
 do_check() {
@@ -320,9 +352,15 @@ do_check() {
       return 0
   fi
 
+  bs_vcvars $bits
   bs_test_env_setup
-  cd "$btmp-$buildtype"
-  ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+  if test -f meson.build
+  then
+    ninja -C "btmp-$buildtype" test
+  else
+    cd "$btmp-$buildtype"
+    ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+  fi
   bs_test_env_teardown
 }
 
@@ -335,11 +373,16 @@ do_package() {
   bs_vcvars $bits
   rm -rf pkgtmp
   mkdir pkgtmp
-  export DESTDIR=$(cmd /c cd | tr -d '\015\012')/pkgtmp
+  export DESTDIR=$(cmd $MSYS_ESC/c cd | tr -d '\015\012')/pkgtmp
+  if test -f meson.build
+  then
+    ninja -C "btmp-$buildtype" install
+  else
   (
      cd "$btmp-$buildtype"
      cmake --build . --config $buildtype --target install
   )
+  fi
   rm -f "$pkgname-$buildtype-$version-$version_patchnum".tar.gz
   cd pkgtmp
   # Must specify location of tar to avoid getting broken one from windows/system32
@@ -483,7 +526,7 @@ do_uninstall_deps() {
   local yobuild
   yobuild="$(bs_get_yobuild_home)"
   case "$yobuild" in
-  /opt*) rm -rf "/cygdrive/c/${yobuild}";;
+  /opt*) rm -rf "$DRIVEC/${yobuild}";;
   esac
 }
 
@@ -600,11 +643,14 @@ _EOF_
 
 # Initialize test environment
 bs_test_env_setup() {
+  local PREFIX="$(bs_get_prefix)"
   echo "bau-defaults/buildshim-win: to set GTEST_FILTER, BS_CTEST_EXTRA, or PATH for do_check, define bs_test_env_setup() in ci/do-check.win."
 
   # Make sure this g-speak is on PATH at all, and is found before any others,
   # else cmake won't find our OblongConfig.cmake.
-  PATH="/cygdrive/c/$(bs_get_gspeak_home)/bin:$PATH"
+  PATH="${DRIVEC}/$(bs_get_gspeak_home)/bin:$PATH"
+  # Make sure we can find other libraries previously built and installed to the prefix.
+  PATH="${PATH}:$DRIVEC/${PREFIX}/bin"
 }
 
 bs_test_env_teardown() {
@@ -644,7 +690,7 @@ bits=$(getconf LONG_BIT)
 
 # Pick up any tools we need from yobuild
 # FIXME: this'll be wrong if yoversion changes during 'bau all'
-if YOBUILDHOME="/cygdrive/c/$(bs_get_yobuild_home)"
+if YOBUILDHOME="$(bs_get_yobuild_home)"
 then
-    PATH="$YOBUILDHOME/bin:$PATH"
+    PATH="${DRIVEC}/$YOBUILDHOME/bin:$PATH"
 fi

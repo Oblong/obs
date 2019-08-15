@@ -16,7 +16,7 @@ chmod +x obs
 # install-bau: bau
 install -m 755 -d ${DESTDIR}${PREFIX}/bin
 install -m 755 bau ${DESTDIR}${PREFIX}/bin
-install -m 755 bau.bat ${DESTDIR}${PREFIX}/bin
+install -m 755 bau.cmd ${DESTDIR}${PREFIX}/bin
 install -m 755 ob-coverage.sh ${DESTDIR}${PREFIX}/bin
 install -m 755 uberbau ${DESTDIR}${PREFIX}/bin
 install -m 755 -d ${DESTDIR}${PREFIX}/share/man/man1
@@ -34,6 +34,7 @@ install -m 644 obs_funcs.sh ${DESTDIR}${PREFIX}/bin
 install -m 755 ob-set-defaults ${DESTDIR}${PREFIX}/bin
 install -m 755 ob-set-targets ${DESTDIR}${PREFIX}/bin
 install -m 755 obs ob-remove.sh ${DESTDIR}${PREFIX}/bin
+install -m 755 obs.cmd ${DESTDIR}${PREFIX}/bin
 install -m 755 ob-list-dbg-pkgs ${DESTDIR}${PREFIX}/bin
 install -m 755 licensing/ob-list-licenses ${DESTDIR}${PREFIX}/bin
 install -m 755 licensing/ob-filter-licenses ${DESTDIR}${PREFIX}/bin

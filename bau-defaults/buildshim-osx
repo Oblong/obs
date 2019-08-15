@@ -179,6 +179,7 @@ do_patch() {
 do_configure() {
   # cmake now finds FindOblong.cmake via PATH
   local G_SPEAK_HOME="$(bs_get_gspeak_home)"
+  local PREFIX=$(bs_get_prefix)
   PATH="${G_SPEAK_HOME}/bin:$PATH"
   YOBUILDHOME="$(bs_get_yobuild_home)"
 
@@ -189,6 +190,10 @@ do_configure() {
   then
     # FIXME: include archlib?
     export PKG_CONFIG_PATH=${G_SPEAK_HOME}/lib/pkgconfig:${YOBUILDHOME}/lib/pkgconfig
+    if test "$PREFIX" != "$G_SPEAK_HOME" && test "$PREFIX" != "$YOBUILDHOME"
+    then
+        PKG_CONFIG_PATH="${PKG_CONFIG_PATH}:${PREFIX}/lib/pkgconfig"
+    fi
     # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
     export BOOST_ROOT=${YOBUILDHOME}
     # FIXME: handle more options
