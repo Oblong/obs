@@ -315,7 +315,8 @@ do_configure() {
     # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
     export BOOST_ROOT=${YOBUILDHOME}
     # FIXME: handle more options
-    meson setup --prefix "$(bs_get_prefix)" "$btmp-$buildtype"
+    # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
+    meson setup --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
   else
     cd "$btmp-$buildtype"
     cmake \
