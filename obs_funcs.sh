@@ -1503,8 +1503,8 @@ bs_set_globals() {
 
     DRIVEC=/wrong/os
     case $_os in
-    cygwin) DRIVEC=/cygdrive/c/;;
-    mingw) DRIVEC=/c;;
+    cygwin) DRIVEC=/cygdrive/c/; MSYS_ESC=;;
+    mingw) DRIVEC=/c; MSYS_ESC=/;;
     esac
 
     # FIXME: provide fewer variables
