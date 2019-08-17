@@ -2,6 +2,22 @@
 set -e
 
 echo "ob-remove.sh: Uninstalling all oblong-related packages (except possibly obs, bau, and ruby gems)."
+echo "Options:"
+echo "--undev: also remove (nearly) all '-dev' packages."
+echo "--autoremove: also remove no-longer-needed packages."
+echo ""
+
+opt_undev=false
+opt_autoremove=${opt_autoremove:-false}
+while test "$1" != ""
+do
+  case "$1" in
+  --undev) opt_undev=true;;
+  --autoremove) opt_autoremove=true;;
+  *) echo "Unknown arg $1"; exit 1;;
+  esac
+  shift
+done
 
 case "$BAU_VERBOSE" in
 1) set -x;;
@@ -20,9 +36,6 @@ then
 fi
 
 # set $opt_rubytoo to anything if you want to remove all ruby gems
-
-# Set this to true if you want to remove dependencies (including ruby), too
-opt_autoremove=${opt_autoremove:-false}
 
 # Regular expression for packages to remove
 blacklist_re="g-speak|oblong|mezzanine|whiteboard|corkboard|ob-http-ctl|libpdl-opencv-perl|libpdl-linearalgebra-perl|libpdl-graphics-gnuplot-perl|ob-awesomium|build-deps|depdemo"
@@ -54,6 +67,12 @@ fi
 if test "$OLDPKGS"
 then
     dpkg --purge $OLDPKGS || true
+fi
+
+if $undev
+then
+    devpkgs=$(dpkg-query -l '*-dev' | tail -n +7 | grep '^ii' | egrep -v "$whitelist_re" | egrep -v 'libc++-dev|libc6-dev|libgcc-.*-dev|libstdc.*-dev|dpkg-dev' | awk '{print $2}')
+    apt-get remove -y $devpkgs
 fi
 
 if $opt_autoremove
