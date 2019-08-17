@@ -5,7 +5,13 @@ echo "ob-remove.sh: Uninstalling all oblong-related packages (except possibly ob
 echo "Options:"
 echo "--undev: also remove (nearly) all '-dev' packages."
 echo "--autoremove: also remove no-longer-needed packages."
+echo "-v: verbose"
 echo ""
+
+case "$BAU_VERBOSE" in
+1) set -x;;
+*) set +x;;
+esac
 
 opt_undev=false
 opt_autoremove=${opt_autoremove:-false}
@@ -14,15 +20,11 @@ do
   case "$1" in
   --undev) opt_undev=true;;
   --autoremove) opt_autoremove=true;;
+  -v) set -x;;
   *) echo "Unknown arg $1"; exit 1;;
   esac
   shift
 done
-
-case "$BAU_VERBOSE" in
-1) set -x;;
-*) set +x;;
-esac
 
 if ! test -w /
 then
@@ -69,7 +71,7 @@ then
     dpkg --purge $OLDPKGS || true
 fi
 
-if $undev
+if $opt_undev
 then
     devpkgs=$(dpkg-query -l '*-dev' | tail -n +7 | grep '^ii' | egrep -v "$whitelist_re" | egrep -v 'libc++-dev|libc6-dev|libgcc-.*-dev|libstdc.*-dev|dpkg-dev' | awk '{print $2}')
     apt-get remove -y $devpkgs
