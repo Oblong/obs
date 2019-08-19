@@ -288,13 +288,17 @@ do_configure() {
   # cmake now finds FindOblong.cmake via PATH
   PATH="$DRIVEC/${G_SPEAK_HOME}/bin:$PATH"
 
+  # Set PKG_CONFIG_PATH for meson projects' benefit.
   # Alas, PKG_CONFIG_PATH must use windows drive letters and semicolon separators,
-  # else win10 treats it as msys paths!
+  # else meson(?) treats it as msys paths on windows!
   export "PKG_CONFIG_PATH=c:${G_SPEAK_HOME}/lib/pkgconfig;c:${YOBUILDHOME}/lib/pkgconfig"
   if test "$PREFIX" != "$G_SPEAK_HOME" && test "$PREFIX" != "$YOBUILDHOME"
   then
       PKG_CONFIG_PATH="${PKG_CONFIG_PATH};c:${PREFIX}/lib/pkgconfig"
   fi
+  # hack to find gstreamer for now
+  PKG_CONFIG_PATH="${PKG_CONFIG_PATH};c:${YOBUILDHOME}/gstreamer/1.0/x86_64/lib/pkgconfig"
+
   local buildtype
   buildtype="$(bs_get_cmake_buildtype)"
   bs_vcvars $bits
