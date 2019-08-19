@@ -8,9 +8,9 @@ VERSIONOID=1038
 
 # bau: bau.in
 echo VERSIONOID is ${VERSIONOID}
-sed 's/@VERSIONOID@/${VERSIONOID}/' < bau.in > bau
+sed "s/@VERSIONOID@/${VERSIONOID}/" < bau.in > bau
 chmod +x bau
-sed 's/@VERSIONOID@/${VERSIONOID}/' < obs.in > obs
+sed "s/@VERSIONOID@/${VERSIONOID}/" < obs.in > obs
 chmod +x obs
 
 # install-bau: bau
