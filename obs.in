@@ -97,7 +97,7 @@ esac
 
 # Show tags and current description relative to them.
 # For buildbot diagnostics.
-obs_tags() {
+obs_describe() {
     git tag -l
     git describe --tags
 }
