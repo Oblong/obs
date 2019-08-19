@@ -262,7 +262,9 @@ bs_get_yobuild_home() {
     then
         # First try: get from debian/rules
         # FIXME: on Windows, debian/rules in samples is a Windows-style path, kind of, with C: tacked on.  Convert to cygwin.
-        awk -F= '/^YOBUILD=/ {print $2}' "${bs_origdirslash}debian/rules" | sed "s,^C:,$DRIVEC,;s,//,/,g" | tr -d '\015'
+	# FIXME: no, don't convert to cygwin, strip the drive letter.
+	# We don't support building on other drives for now.
+        awk -F= '/^YOBUILD=/ {print $2}' "${bs_origdirslash}debian/rules" | sed "s,^C:,,;s,//,/,g" | tr -d '\015'
     elif ob-version | awk 'BEGIN { err=1 } /ob_yobuild_dir/ { print $3; err=0 } END { exit err }'
     then
         # Second try: ask ob-version
