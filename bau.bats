@@ -20,7 +20,7 @@ esac
   then
     echo "Skipping test, since meson or pkg-config not available (ECHICKENEGG)."
     echo "(To test meson support, install yobuild13, then do 'make check-bau'.)"
-  elif test -d /Library && ! test -f ${YOBUILD}/include/pcre.h
+  elif ! test -d /etc/apt && ! test -f ${YOBUILD}/include/pcre.h
   then
     echo "Skipping test, since pcre not available (ECHICKENEGG)."
     echo "(To test meson support, install yobuild13, then do 'make check-bau'.)"
