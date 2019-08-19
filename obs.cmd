@@ -14,6 +14,7 @@ goto :eof
 goto :eof
 
 :main
+IF NOT EXIST ci\winshell.txt goto :cygwin
 SET /P REALM=<ci\winshell.txt
 if x"%REALM%" == x"" goto :fail
 if %REALM% == cygwin goto :cygwin
