@@ -550,7 +550,7 @@ bs_vcvars32() {
         esac
         ;;
     esac
-    if ! yes | cl /? > /dev/null 2>&1
+    if ! yes | cl '/?' > /dev/null 2>&1
     then
         bs_abort "Cannot run visual c++"
     fi
@@ -572,7 +572,7 @@ bs_vcvars64() {
         esac
         ;;
     esac
-    if ! yes | cl /? > /dev/null 2>&1
+    if ! yes | cl '/?' > /dev/null 2>&1
     then
         bs_abort "Cannot run visual c++"
     fi
