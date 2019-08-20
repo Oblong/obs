@@ -1,8 +1,14 @@
 #!/bin/sh
-# git-bash install script (since git-bash doesn't come with Make)
+# Install script that works without Make
+# (Written because git-bash doesn't come with that tool.)
 # Must track Makefile :-(
 
-PREFIX=/c/opt/oblong
+if test -d /cygdrive/c
+then
+  PREFIX=/cygdrive/c/opt/oblong
+else
+  PREFIX=/c/opt/oblong
+fi
 
 VERSIONOID=1038
 
@@ -40,4 +46,3 @@ install -m 755 licensing/ob-list-licenses ${DESTDIR}${PREFIX}/bin
 install -m 755 licensing/ob-filter-licenses ${DESTDIR}${PREFIX}/bin
 install -m 755 licensing/ob-parse-licenses ${DESTDIR}${PREFIX}/bin
 install -m 755 ob-build-deps ${DESTDIR}${PREFIX}/bin
-
