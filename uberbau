@@ -37,6 +37,8 @@ Remove all installed packages and clear local artifacts:
     $0 install_deps
 git-clone the projects of interest (this is a no-op if the project has already been cloned):
     $0 clone proj1 proj2 ...
+check whether a set of projects have been tagged for release
+    $0 tagcheck proj1 proj2 ...
 Grab already-built artifacts that you don't feel like rebuilding (nobuild, yobuild, gspeak supported so far):
     $0 mirror yobuild
 Build the projects of interest:
@@ -558,6 +560,26 @@ build_many() {
     do
         build_one $project
     done
+}
+
+tagcheck_many() {
+    local failed=""
+    for project
+    do
+        expand_url $project
+        local project=$eu_project
+        local url=$eu_url
+        local branch=$eu_branch
+        if git -C $LB_SRCTOP/$project describe | grep -e '-[0-9]*-g[0-9a-f]*$'
+        then
+            failed="$failed $project"
+            bs_warn "Project $project is not on a tag"
+        fi
+    done
+    if test "$failed" != ""
+    then
+        bs_abort "Projects not on tags:$failed"
+    fi
 }
 
 set_version() {
@@ -1248,6 +1270,9 @@ case $cmd in
     build)
         do_check_deps
         build_many `expand_lists "$@"`
+        ;;
+    tagcheck)
+        tagcheck_many `expand_lists "$@"`
         ;;
     checkout)
         checkout_many `expand_lists "$@"`
