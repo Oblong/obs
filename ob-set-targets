@@ -1,9 +1,11 @@
 #!/bin/sh
 set -e
 
-# To change the versions of ubuntu we target, edit or override the following line
-UBUNTUS="${UBUNTUS:-16.04 18.04}"
-# or override it in ob-set-targets.conf
+UBUNTUS="${UBUNTUS:-18.04}"
+EXTRA_RENDERIZER_ARGS=""
+# To change the versions of ubuntu we target, or reference additional
+# .yml files, set UBUNTUS or EXTRA_RENDERIZER_ARGS in ob-set-targets.conf
+# (which can include shell code if you want to get fancy)
 if test -f ci/ob-set-targets.conf
 then
   . ci/ob-set-targets.conf
@@ -165,7 +167,7 @@ linter() {
 
 expandit() {
   oslist2yml OSLIST $UBUNTUS > /tmp/params.$UNIQ.yml
-  renderizer -S=/tmp/params.$UNIQ.yml .gitlab-ci.yml.tpl > .gitlab-ci.yml
+  renderizer -S=/tmp/params.$UNIQ.yml $EXTRA_RENDERIZER_ARGS .gitlab-ci.yml.tpl > .gitlab-ci.yml
   rm /tmp/params.$UNIQ.yml
 }
 
@@ -179,7 +181,7 @@ precommit() {
 
   # Expand template to a temporary file
   oslist2yml OSLIST $UBUNTUS > /tmp/params.$UNIQ.yml
-  renderizer -S=/tmp/params.$UNIQ.yml .gitlab-ci.yml.tpl > /tmp/.gitlab-ci.yml.$UNIQ.tmp
+  renderizer -S=/tmp/params.$UNIQ.yml $EXTRA_RENDERIZER_ARGS .gitlab-ci.yml.tpl > /tmp/.gitlab-ci.yml.$UNIQ.tmp
   rm /tmp/params.$UNIQ.yml
   # Assert that .gitlab-ci.yml would not change
   if ! diff -u .gitlab-ci.yml /tmp/.gitlab-ci.yml.$UNIQ.tmp
