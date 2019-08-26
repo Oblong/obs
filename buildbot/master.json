@@ -1422,7 +1422,8 @@
                 { "os":"ubu1604", "branch":"master", "params":"--lprojects depdemo-proton"              },
                 { "os":"ubu1604", "branch":"master", "params":"--lprojects depdemo-proton", "try":"yes" },
                 { "os":"win10",   "branch":"master", "params":"--lprojects depdemo-proton"              },
-                { "os":"win10",   "branch":"master", "params":"--lprojects depdemo-proton", "try":"yes" }
+                { "os":"win10",   "branch":"master", "params":"--lprojects depdemo-proton", "try":"yes" },
+                { "os":"win10_msvc2017",   "branch":"master", "params":"--lprojects depdemo-proton", "try":"yes"}
             ]
         },
         {
@@ -1897,13 +1898,13 @@
                 { "os":"osx1012",       "branch":"master", "try":"yes" },
                 { "os":"ubu1604",       "branch":"master"              },
                 { "os":"ubu1604",       "branch":"master", "try":"yes" },
-                { "os":"ubu1604pi3",    "branch":"master"              },
                 { "os":"ubu1804",       "branch":"master"              },
                 { "os":"ubu1804",       "branch":"master", "try":"yes" },
                 { "os":"ubu1904",       "branch":"master"              },
                 { "os":"ubu1904",       "branch":"master", "try":"yes" },
                 { "os":"win10",         "branch":"master"              },
-                { "os":"win10",         "branch":"master", "try":"yes" }
+                { "os":"win10",         "branch":"master", "try":"yes" },
+                { "os":"win10_msvc2017","branch":"master", "try":"yes" }
             ]
         },
         {
