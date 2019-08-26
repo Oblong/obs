@@ -10,7 +10,7 @@ else
   PREFIX=/c/opt/oblong
 fi
 
-VERSIONOID=1038
+VERSIONOID=1039
 
 # bau: bau.in
 echo VERSIONOID is ${VERSIONOID}
