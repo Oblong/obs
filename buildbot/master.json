@@ -267,6 +267,16 @@
         },
         {
             "category" : "astor",
+            "name"     : "prius-assets",
+            "comment"  : "Uses lfs",
+            "repourl"  : "git@gitlab.oblong.com:solutions/prius-assets.git",
+            "builders" : [
+                { "os":"ubu1604", "branch":"master" },
+                { "os":"ubu1604", "branch":"master", "try":"yes" }
+            ]
+        },
+        {
+            "category" : "astor",
             "name"     : "wild-pinaco-assets",
             "comment"  : "Uses lfs; buildshim uses bs_kludge_init_git_lfs in case git-lfs wasn't installed",
             "repourl"  : "git@gitlab-ibm.oblong.com:astor/wild-pinaco-assets.git",
