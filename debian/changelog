@@ -1,3 +1,9 @@
+oblong-obs (1.41) bionic; urgency=low
+
+  * Support ubuntu 19.04.
+
+ -- Dan Kegel <dank@oblong.com>  Thu, 26 Sep 2019 09:16:53 -0700
+
 oblong-obs (1.33) bionic; urgency=low
 
   * Support yobuild13.
