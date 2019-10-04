@@ -864,7 +864,7 @@ mirror_yobuild() {
     esac
 }
 
-mirror_gspeak() {
+mirror_yovo() {
     case $GSPEAK_VER in
     *[02468]) kind=rel; builder=rel-$GSPEAK_VER; yovobuilder=$builder;;
     *[13579]) kind=dev; builder=master; yovobuilder=iz;;
@@ -878,10 +878,28 @@ mirror_gspeak() {
 
     case $_os in
     ubu*) mirror_one yovo-$_os-$yovobuilder$SUFFIX apt $kind
-          mirror_one staging-$_os-$builder$SUFFIX apt $kind
           ;;
     *)    mirror_one yovo-$_os-$yovobuilder$SUFFIX g-speak${SUFFIX}$GSPEAK_VER $kind
-          mirror_one staging-$_os-$builder$SUFFIX staging${SUFFIX}$GSPEAK_VER $kind
+          ;;
+    esac
+}
+
+mirror_staging() {
+    case $GSPEAK_VER in
+    *[02468]) kind=rel; builder=rel-$GSPEAK_VER; yovobuilder=$builder;;
+    *[13579]) kind=dev; builder=master; yovobuilder=iz;;
+    *) bs_abort "can't tell whether $GSPEAK_VER is dev or rel";;
+    esac
+
+    SUFFIX=""
+    case "$BSOPTS" in
+    *greenhouse*) SUFFIX=-gh;;
+    esac
+
+    case $_os in
+    ubu*) mirror_one staging-$_os-$builder$SUFFIX apt $kind
+          ;;
+    *)    mirror_one staging-$_os-$builder$SUFFIX staging${SUFFIX}$GSPEAK_VER $kind
           ;;
     esac
 }
@@ -891,7 +909,9 @@ mirror_kludge_one() {
     minimal) mirror_minimal;;
     nobuild) mirror_nobuild;;
     yobuild) mirror_yobuild;;
-    gspeak) mirror_gspeak;;
+    gspeak)  mirror_yovo; mirror_staging;;
+    yovo)    mirror_yovo;;
+    staging) mirror_staging;;
     *) bs_abort "Dunno how to mirror $1 yet";;
     esac
 }

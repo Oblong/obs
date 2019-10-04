@@ -283,6 +283,7 @@ do_lclone() {
   parse_opts "$@"
 
   local projname=$(bs_get_projname)
+  local pkgname=$(bs_get_pkgname)
   local mirror="$(cat bs-lmirror.dat 2>/dev/null || true)"
   local bsoptions="$(cat bs-options.dat 2>/dev/null || true)"
   local projects
@@ -343,7 +344,11 @@ do_lclone() {
   # protects us from being fooled by comments.
 
   mirrorgroups="minimal"
-  if (cd "$origdir"; ob-build-deps) | grep -qE 'g-speak|oblong-noodoo|oblong-loam|oblong-plasma|oblong-gs'
+  if echo $pkgname | grep oblong-staging
+  then
+     # kludge: don't have time to fix autodetect, so cheat
+     mirrorgroups="nobuild yobuild yovo"
+  elif (cd "$origdir"; ob-build-deps) | grep -qE 'g-speak|oblong-noodoo|oblong-loam|oblong-plasma|oblong-gs'
   then
      # gspeak includes yovo and staging, with -gh if --greenhouse in BS_OPTS
      mirrorgroups="nobuild yobuild gspeak"
