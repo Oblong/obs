@@ -24,9 +24,11 @@ endif
 
 #VERSION := $(shell obs get-version)
 # Integer version
+# (version major * 1000 + version minor)
 VERSIONOID_GIT := $(shell echo $$(( $$(sh ./obs.in get-major-version-git) * 1000 + $$(sh ./obs.in get-minor-version-git) )) )
 # Alas, until we script brew updates differently, must hardcode version here.
-VERSIONOID := 1041
+# Must edit VERSIONOID in both Makefile and msys-install.sh
+VERSIONOID := 1042
 
 # gnu make double-colon means only applies if dependency exists
 %:: %.in Makefile
@@ -60,7 +62,7 @@ check: check-apt check-bau check-obs check-ob-set-defaults check-uberbau check-v
 
 check-version: obs
 	# Assert they are equal
-	# Skip if try or homebrew build 
+	# Skip if try or homebrew build
 	if test "$(VERSIONOID)" != "$(VERSIONOID_GIT)"; then \
 	   if ./obs is-try || env | grep HOMEBREW; then \
 		echo "Note: VERSIONOID $(VERSIONOID) != VERSIONOID_GIT $(VERSIONOID_GIT)"; \
@@ -136,7 +138,7 @@ install-bau: bau.1 bau baugen.sh
 	install -m 644 bau-defaults/buildshim-win $(DESTDIR)$(PREFIX)/bin/bau-defaults/buildshim-win
 	install -m 644 bs_funcs.sh $(DESTDIR)$(PREFIX)/bin
 
-install-obs: obs 
+install-obs: obs
 	install -m 755 -d $(DESTDIR)$(PREFIX)/bin
 	install -m 644 obs_funcs.sh $(DESTDIR)$(PREFIX)/bin
 	install -m 755 ob-set-defaults $(DESTDIR)$(PREFIX)/bin

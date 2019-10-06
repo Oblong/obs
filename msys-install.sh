@@ -10,7 +10,9 @@ else
   PREFIX=/c/opt/oblong
 fi
 
-VERSIONOID=1041
+# This is version major * 1000 + version minor
+# Must edit VERSIONOID in both Makefile and msys-install.sh
+VERSIONOID=1042
 
 # bau: bau.in
 echo VERSIONOID is ${VERSIONOID}
