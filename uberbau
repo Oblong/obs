@@ -804,7 +804,6 @@ mirror_nobuild() {
         mirror_one decklink-sdk-$_os-master  apt rel
         mirror_one gst-oblong-$_os-master-yobuild$YOVERSION           apt   rel
         mirror_one oblong-cef-$_os-${CEFBRANCHNAME}-yobuild$YOVERSION apt rel
-        mirror_one oblong-v8-$_os-master-yobuild$YOVERSION            apt rel
         mirror_one obmcp-$_os-master                                  apt   rel
         mirror_one rubygems-deps-$_os-master apt rel
         mirror_one third-party-$_os-master                            apt rel   # provides nodejs6 and loads of other stuff, like node
@@ -812,7 +811,6 @@ mirror_nobuild() {
     osx*)
         echo "Guessing about these versions..."
         mirror_one oblong-cef-$_os-${CEFBRANCHNAME}-yobuild$YOVERSION oblong-yobuild$YOVERSION-$CEFBRANCH rel
-        mirror_one oblong-v8-$_os-master-yobuild$YOVERSION            oblong-yobuild$YOVERSION-v8-5.2.361 rel
         # FIXME: This one's a bit awkward.
         # repackage-qt/ci/buildshim hardcodes output package name to 'qt59'.
         # platform/repackage-qt -> tarballs/qt59/osx1014/5.9, rel/builds/repackage-qt-master-normal-osx1014/
@@ -954,7 +952,6 @@ list_nobuild() {
 
     # oblong-cef needs to be told which branch to build
     echo "oblong-cef#${CEFBRANCHNAME}"
-    echo oblong-v8
 }
 
 list_gspeak() {
