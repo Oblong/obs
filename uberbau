@@ -24,7 +24,7 @@ The arguments to list/clone/build can be
 - names of single projects, e.g.
     yovo staging
 - git urls, e.g.
-    git@gitlab.oblong.com:dank/growroom
+    git@gitlab.oblong.com:dank/staging
 and they can optionally be followed by a #branch, e.g.
     yovo#iz yovo#rel-10
 
@@ -49,7 +49,7 @@ Switch to a release branch for a set of projects:
 
 Branch a new release of a set of projects:
     $0 branch gspeak
-    $0 branch yovo staging webthing-cef greenhouse growroom samples
+    $0 branch yovo staging webthing-cef greenhouse samples
 
 Push after branching:
     $0 push gspeak
@@ -995,11 +995,6 @@ list_hantenna() {
 list_gspeak_gloved() {
     # can't build greenhouse without gloveless
     echo greenhouse
-    # can't build growroom without greenhouse
-    case $_os in
-    ubu12*|ubu14*) ;;   # Older ubuntu can't build modern v8 / growroom
-    ubu*|osx*) echo growroom ;;
-    esac
 }
 
 list_motion() {
