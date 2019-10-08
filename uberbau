@@ -24,7 +24,7 @@ The arguments to list/clone/build can be
 - names of single projects, e.g.
     yovo staging
 - git urls, e.g.
-    git@gitlab.oblong.com:dank/growroom
+    git@gitlab.oblong.com:dank/staging
 and they can optionally be followed by a #branch, e.g.
     yovo#iz yovo#rel-10
 
@@ -49,7 +49,7 @@ Switch to a release branch for a set of projects:
 
 Branch a new release of a set of projects:
     $0 branch gspeak
-    $0 branch yovo staging webthing-cef greenhouse growroom samples
+    $0 branch yovo staging webthing-cef greenhouse samples
 
 Push after branching:
     $0 push gspeak
@@ -804,7 +804,6 @@ mirror_nobuild() {
         mirror_one decklink-sdk-$_os-master  apt rel
         mirror_one gst-oblong-$_os-master-yobuild$YOVERSION           apt   rel
         mirror_one oblong-cef-$_os-${CEFBRANCHNAME}-yobuild$YOVERSION apt rel
-        mirror_one oblong-v8-$_os-master-yobuild$YOVERSION            apt rel
         mirror_one obmcp-$_os-master                                  apt   rel
         mirror_one rubygems-deps-$_os-master apt rel
         mirror_one third-party-$_os-master                            apt rel   # provides nodejs6 and loads of other stuff, like node
@@ -812,7 +811,6 @@ mirror_nobuild() {
     osx*)
         echo "Guessing about these versions..."
         mirror_one oblong-cef-$_os-${CEFBRANCHNAME}-yobuild$YOVERSION oblong-yobuild$YOVERSION-$CEFBRANCH rel
-        mirror_one oblong-v8-$_os-master-yobuild$YOVERSION            oblong-yobuild$YOVERSION-v8-5.2.361 rel
         # FIXME: This one's a bit awkward.
         # repackage-qt/ci/buildshim hardcodes output package name to 'qt59'.
         # platform/repackage-qt -> tarballs/qt59/osx1014/5.9, rel/builds/repackage-qt-master-normal-osx1014/
@@ -954,7 +952,6 @@ list_nobuild() {
 
     # oblong-cef needs to be told which branch to build
     echo "oblong-cef#${CEFBRANCHNAME}"
-    echo oblong-v8
 }
 
 list_gspeak() {
@@ -995,11 +992,6 @@ list_hantenna() {
 list_gspeak_gloved() {
     # can't build greenhouse without gloveless
     echo greenhouse
-    # can't build growroom without greenhouse
-    case $_os in
-    ubu12*|ubu14*) ;;   # Older ubuntu can't build modern v8 / growroom
-    ubu*|osx*) echo growroom ;;
-    esac
 }
 
 list_motion() {
