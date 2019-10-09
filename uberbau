@@ -897,7 +897,7 @@ mirror_staging() {
     case $_os in
     ubu*) mirror_one staging-$_os-$builder$SUFFIX apt $kind
           ;;
-    *)    mirror_one staging-$_os-$builder$SUFFIX staging${SUFFIX}$GSPEAK_VER $kind
+    *)    mirror_one staging-$_os-$builder$SUFFIX oblong-staging${SUFFIX}$GSPEAK_VER $kind
           ;;
     esac
 }
