@@ -1733,6 +1733,16 @@
         },
         {
             "category" : "platform",
+            "name"      : "oblong-amdgpu-dkms",
+            "repourl"   : "git@gitlab.oblong.com:platform/oblong-amdgpu-dkms.git",
+            "comment"   : "Repackages amdgpu's dkms package with a few patches.  18.04 only.",
+            "builders"  : [
+                { "os":"ubu1804", "branch":"master", "try":"yes" },
+                { "os":"ubu1804", "branch":"master" }
+            ]
+        },
+        {
+            "category" : "platform",
             "name"      : "oblong-cef",
             "repourl"   : "git@gitlab.oblong.com:platform/oblong-cef.git",
             "comment"   : "caution, use even version of g-speak below, as you want result to land in rel repo",
@@ -2685,7 +2695,7 @@
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug"                           },
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-coverage", "params":"--coverage --debug --no-publish"          },
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-gh",       "params":"--greenhouse"             },
-                { "os":"ubu1604", "branch":"iz",       "suffix":"-tdt",      "params":"--g-speak 5.1 --cef 3497 --no-tests --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497 --lprojects rtsp-viddle-server,staging,webthing-cef,hantenna,greenhouse,samples,mosaic,libtrackingrenderer,ir_inertial,motion,mezzanine-kipple,mezzanine", "try":"yes" },
+                { "os":"ubu1604", "branch":"iz",       "suffix":"-tdt",      "params":"--g-speak 5.1 --cef 3497 --no-tests --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497 --lprojects rtsp-viddle-server,staging,webthing-cef,hantenna,greenhouse,samples,mosaic,libtrackingrenderer,ir_inertial,motion", "try":"yes" },
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-tsan",     "params":"--tsan"                   },
                 { "os":"ubu1604", "branch":"rel-4.2"                                                             },
                 { "os":"ubu1604", "branch":"rel-4.2",                                                "try":"yes" },
