@@ -43,6 +43,7 @@ bs_os_codename() {
     ubu1604*) echo xenial;;
     ubu1804) echo bionic;;
     ubu1904) echo disco;;
+    ubu1910) echo eoan;;
     osx*)    echo $1;;       # happens if doing bs_stamp_debian_changelog on osx
     *) bs_abort "bs_os_codename: don't know codename for $1 yet";;
     esac
@@ -56,6 +57,8 @@ bs_os_pkg_suffix() {
     ubu1704) echo "+zesty";;
     ubu1710) echo "+artful";;
     ubu1804) echo "+bionic";;
+    ubu1904) echo "+disco";;
+    ubu1910) echo "+eoan";;
     fc5) echo ".fc5";;
     *) bs_abort "os_pkg_suffix: unknown os '$_os'";;
     esac
