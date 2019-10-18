@@ -91,6 +91,7 @@ bs_detect_os() {
         elif grep -q "Ubuntu Core 16" /etc/issue ; then echo ubu1604
         elif grep -q "Ubuntu 18.04" /etc/issue ; then echo ubu1804
         elif grep -q "Ubuntu 19.04" /etc/issue ; then echo ubu1904
+        elif grep -q "Ubuntu 19.10" /etc/issue ; then echo ubu1910
         else bs_abort "unrecognized linux" >&2
         fi
         ;;
