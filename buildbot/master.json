@@ -240,7 +240,20 @@
                 { "os":"osx1014", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  },
                 { "os":"ubu1604", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" },
                 { "os":"ubu1604", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  },
-                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" }
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" },
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  }
+            ]
+        },
+        {
+            "category" : "astor",
+            "name"     : "sagan-assets",
+            "comment"  : "Uses lfs",
+            "repourl"  : "git@gitlab.oblong.com:solutions/sagan-assets.git",
+            "builders" : [
+                { "os":"ubu1604", "branch":"master" },
+                { "os":"ubu1604", "branch":"master", "try":"yes" },
+                { "os":"ubu1804", "branch":"master" },
+                { "os":"ubu1804", "branch":"master", "try":"yes" }
             ]
         },
         {
