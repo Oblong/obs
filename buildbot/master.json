@@ -217,7 +217,13 @@
                 { "os":"osx1014", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  },
                 { "os":"ubu1604", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" },
                 { "os":"ubu1604", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  },
-                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" }
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" },
+                { "os":"osx1014", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1" },
+                { "os":"osx1014", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1", "try":"yes"  },
+                { "os":"ubu1604", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1" },
+                { "os":"ubu1604", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1", "try":"yes"  },
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1" },
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1", "try":"yes"  }
             ]
         },
         {
@@ -241,7 +247,13 @@
                 { "os":"ubu1604", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" },
                 { "os":"ubu1604", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  },
                 { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0" },
-                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  }
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.0", "params":"--g-speak 5.0", "try":"yes"  },
+                { "os":"osx1014", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1" },
+                { "os":"osx1014", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1", "try":"yes"  },
+                { "os":"ubu1604", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1" },
+                { "os":"ubu1604", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1", "try":"yes"  },
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1" },
+                { "os":"ubu1804", "branch":"master", "suffix":"-5.1", "params":"--g-speak 5.1", "try":"yes"  }
             ]
         },
         {
