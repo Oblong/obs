@@ -588,7 +588,7 @@ bs_test_env_setup() {
       then
           LSAN_OPTIONS="$(cat $origdir/ci/lsan-options.txt)"
       else
-          LSAN_OPTIONS="print_suppressions=1 report_objects=1"
+          LSAN_OPTIONS="print_suppressions=1:report_objects=1:verbosity=1:log_threads=1"
       fi
       if test -f "$origdir/ci/lsan-suppressions.txt"
       then
