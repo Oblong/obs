@@ -991,6 +991,8 @@ list_gspeak() {
     esac
 }
 
+# This should go away now that gloveless is gone,
+# but it's too painful... other things still need buildsystem and libAttic
 list_hantenna() {
     case $_os in
     ubu1204) echo gmsl;;   # Mac buildshims get it from yobuild anyway, see bug 16633
@@ -1003,8 +1005,6 @@ list_hantenna() {
     echo buildsystem
     echo libAttic
     echo liboblong-dimager
-    echo gloveless
-    echo gloveless-models
 }
 
 # list_gspeak continues here after list_hantenna
