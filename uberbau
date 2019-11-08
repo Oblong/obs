@@ -902,12 +902,33 @@ mirror_staging() {
     esac
 }
 
+mirror_plasma_bindings() {
+    case $GSPEAK_VER in
+    *[02468]) kind=rel; builder=rel-$GSPEAK_VER; yovobuilder=$builder;;
+    *[13579]) kind=dev; builder=master; yovobuilder=iz;;
+    *) bs_abort "can't tell whether $GSPEAK_VER is dev or rel";;
+    esac
+
+    SUFFIX=""
+    case "$BSOPTS" in
+    *greenhouse*) SUFFIX=-gh;;
+    esac
+
+    # FIXME: Maybe ruby and python, too?  Ruby's currently baked into yovo, python isn't shipped yet.
+    case $_os in
+    ubu*) mirror_one guile-plasma-$_os-$builder$SUFFIX apt $kind
+          ;;
+    *)    mirror_one guile-plasma-$_os-$builder$SUFFIX oblong-guile-plasma${SUFFIX}$GSPEAK_VER $kind
+          ;;
+    esac
+}
+
 mirror_kludge_one() {
     case $1 in
     minimal) mirror_minimal;;
     nobuild) mirror_nobuild;;
     yobuild) mirror_yobuild;;
-    gspeak)  mirror_yovo; mirror_staging;;
+    gspeak)  mirror_yovo; mirror_staging; mirror_plasma_bindings;;
     yovo)    mirror_yovo;;
     staging) mirror_staging;;
     *) bs_abort "Dunno how to mirror $1 yet";;
@@ -965,11 +986,9 @@ list_gspeak() {
         echo gelatin
         echo plasma-web-proxy
         echo ollivander
+        echo guile-plasma
         ;;
     esac
-    # Add guile-plasma after
-    # https://gitlab.oblong.com/platform/guile-plasma/issues/1
-    # is fixed
 }
 
 list_hantenna() {
