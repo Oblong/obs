@@ -18,6 +18,7 @@
         { "os":"osx1014",          "name":"rbb-osx1014-3" },
         { "os":"osx1014",          "name":"rbb-osx1014-4" },
         { "os":"osx1015",          "name":"rbb-osx1015-1" },
+        { "os":"osx1015",          "name":"rbb-osx1015-2" },
         { "os":"ubu1604",          "name":"rbb-ubu1604-1"                                },
         { "os":"ubu1604",          "name":"rbb-ubu1604-2"                                },
         { "os":"ubu1604",          "name":"rbb-ubu1604-3"                                },
@@ -36,10 +37,15 @@
         { "os":"ubu1804",          "name":"rbb-ubu1804-7"                                },
         { "os":"ubu1804",          "name":"rbb-ubu1804-8"                                },
         { "os":"ubu1804",          "name":"rbb-ubu1804-9"                                },
-        { "os":"ubu1804",          "name":"rbb-ubu1804-10"                                },
+        { "os":"ubu1804",          "name":"rbb-ubu1804-10"                               },
         { "os":"ubu1904",          "name":"rbb-ubu1904-1"                                },
         { "os":"ubu1904",          "name":"rbb-ubu1904-2"                                },
         { "os":"ubu1904",          "name":"rbb-ubu1904-3"                                },
+        { "os":"ubu1904",          "name":"rbb-ubu1904-4"                                },
+        { "os":"ubu1910",          "name":"rbb-ubu1910-1"                                },
+        { "os":"ubu1910",          "name":"rbb-ubu1910-2"                                },
+        { "os":"ubu1910",          "name":"rbb-ubu1910-3"                                },
+        { "os":"ubu1910",          "name":"rbb-ubu1910-4"                                },
         { "os":"win10",            "name":"rbb-win10-1"                                  },
         { "os":"win10",            "name":"rbb-win10-2"                                  },
         { "os":"win10_msvc2017",   "name":"rbb-win10-3"                                  },
@@ -435,7 +441,9 @@
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" },
                 { "os":"ubu1904", "branch":"master"              },
-                { "os":"ubu1904", "branch":"master", "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "try":"yes" },
+                { "os":"ubu1910", "branch":"master"              },
+                { "os":"ubu1910", "branch":"master", "try":"yes" }
             ]
         },
         {
@@ -736,6 +744,17 @@
         },
         {
             "category" : "hardware",
+            "name"     : "liboblong-isense",
+            "repourl"  : "git@gitlab.oblong.com:hardware/liboblong-isense.git",
+            "builders" : [
+                { "os":"ubu1604", "branch":"debian" },
+                { "os":"ubu1804", "branch":"debian" },
+                { "os":"ubu1904", "branch":"debian" },
+                { "os":"ubu1910", "branch":"debian" }
+            ]
+        },
+        {
+            "category" : "hardware",
             "name"     : "libqtplasma",
             "repourl"  : "git@gitlab.oblong.com:hardware/libqtplasma.git",
             "builders" : [
@@ -858,7 +877,11 @@
                 { "os":"ubu1904", "branch":"master"              },
                 { "os":"ubu1904", "branch":"master", "try":"yes" },
                 { "os":"ubu1904", "branch":"rel-1"               },
-                { "os":"ubu1904", "branch":"rel-1",  "try":"yes" }
+                { "os":"ubu1904", "branch":"rel-1",  "try":"yes" },
+                { "os":"ubu1910", "branch":"master"              },
+                { "os":"ubu1910", "branch":"master", "try":"yes" },
+                { "os":"ubu1910", "branch":"rel-1"               },
+                { "os":"ubu1910", "branch":"rel-1",  "try":"yes" }
             ]
         },
         {
@@ -938,6 +961,96 @@
             ]
         },
         {
+            "category" : "hardware",
+            "name"     : "libAttic",
+            "repourl"  : "git@gitlab.oblong.com:hardware/libAttic.git",
+            "builders" : [
+                { "os":"osx1012", "branch":"master", "suffix":"4.2",     "params":"--g-speak 4.2"                           },
+                { "os":"osx1012", "branch":"master", "suffix":"4.2",     "params":"--g-speak 4.2",              "try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"4.4",     "params":"--g-speak 4.4"                           },
+                { "os":"osx1012", "branch":"master", "suffix":"4.4",     "params":"--g-speak 4.4",              "try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6"                           },
+                { "os":"osx1012", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6",              "try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"4.6-gh",  "params":"--g-speak 4.6  --greenhouse"             },
+                { "os":"osx1012", "branch":"master", "suffix":"4.6-gh",  "params":"--g-speak 4.6  --greenhouse","try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8"                           },
+                { "os":"osx1012", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8",              "try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse"             },
+                { "os":"osx1012", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse","try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0"                           },
+                { "os":"osx1012", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0",              "try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse"             },
+                { "os":"osx1012", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse","try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"osx1012", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"osx1012", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse"             },
+                { "os":"osx1012", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse","try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"4.4",     "params":"--g-speak 4.4"                           },
+                { "os":"osx1013", "branch":"master", "suffix":"4.4",     "params":"--g-speak 4.4",              "try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6"                           },
+                { "os":"osx1013", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6",              "try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"4.6-gh",  "params":"--g-speak 4.6  --greenhouse"             },
+                { "os":"osx1013", "branch":"master", "suffix":"4.6-gh",  "params":"--g-speak 4.6  --greenhouse","try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8"                           },
+                { "os":"osx1013", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8",              "try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse"             },
+                { "os":"osx1013", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse","try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0"                           },
+                { "os":"osx1013", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0",              "try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse"             },
+                { "os":"osx1013", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse","try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"osx1013", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"osx1013", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse"             },
+                { "os":"osx1013", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse","try":"yes" },
+                { "os":"osx1014", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8"                           },
+                { "os":"osx1014", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8",              "try":"yes" },
+                { "os":"osx1014", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse"             },
+                { "os":"osx1014", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse","try":"yes" },
+                { "os":"osx1014", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0"                           },
+                { "os":"osx1014", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0",              "try":"yes" },
+                { "os":"osx1014", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse"             },
+                { "os":"osx1014", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse","try":"yes" },
+                { "os":"osx1014", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"osx1014", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"osx1014", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse"             },
+                { "os":"osx1014", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse","try":"yes" },
+                { "os":"osx1015", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"osx1015", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.2",     "params":"--g-speak 4.2"                           },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.2",     "params":"--g-speak 4.2",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.4",     "params":"--g-speak 4.4"                           },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.4",     "params":"--g-speak 4.4",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6"                           },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.6-gh",  "params":"--g-speak 4.6  --greenhouse"             },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8"                           },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"4.8-gh",  "params":"--g-speak 4.8  --greenhouse"             },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0"                           },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.0-gh",  "params":"--g-speak 5.0  --greenhouse"             },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse"             },
+                { "os":"ubu1604", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse","try":"yes" },
+                { "os":"ubu1804", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6"                           },
+                { "os":"ubu1804", "branch":"master", "suffix":"4.6",     "params":"--g-speak 4.6",              "try":"yes" },
+                { "os":"ubu1804", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8"                           },
+                { "os":"ubu1804", "branch":"master", "suffix":"4.8",     "params":"--g-speak 4.8",              "try":"yes" },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0"                           },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.0",     "params":"--g-speak 5.0",              "try":"yes" },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse"             },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.1-gh",  "params":"--g-speak 5.1  --greenhouse","try":"yes" },
+                { "os":"ubu1904", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"ubu1904", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1"                           },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.1",     "params":"--g-speak 5.1",              "try":"yes" }
+            ]
+        },
+        {
             "category" : "perception",
             "name"     : "libdogleg",
             "upstreamrepourl"  : "https://github.com/Oblong/libdogleg.git",
@@ -1004,7 +1117,9 @@
                 { "os":"ubu1804", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"ubu1804", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
                 { "os":"ubu1904", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1"               },
-                { "os":"ubu1904", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1"               },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" }
             ]
         },
         {
@@ -1017,7 +1132,9 @@
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" },
                 { "os":"ubu1904", "branch":"master"              },
-                { "os":"ubu1904", "branch":"master", "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "try":"yes" },
+                { "os":"ubu1910", "branch":"master"              },
+                { "os":"ubu1910", "branch":"master", "try":"yes" }
             ]
         },
         {
@@ -1084,7 +1201,9 @@
                 { "os":"ubu1804", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"ubu1804", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
                 { "os":"ubu1904", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1"               },
-                { "os":"ubu1904", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1"               },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" }
             ]
         },
         {
@@ -1179,7 +1298,9 @@
                 { "os":"ubu1904",         "branch":"3497"                   },
                 { "os":"ubu1904",         "branch":"3497",      "try":"yes" },
                 { "os":"ubu1904",         "branch":"3578"                   },
-                { "os":"ubu1904",         "branch":"3578",      "try":"yes" }
+                { "os":"ubu1904",         "branch":"3578",      "try":"yes" },
+                { "os":"ubu1910",         "branch":"3497"                   },
+                { "os":"ubu1910",         "branch":"3497",      "try":"yes" }
             ]
         },
         {
@@ -1303,41 +1424,41 @@
             "homepage" : "https://wiki.oblong.com/post/main/0FX2OFpbsq0qPZh0",
             "repourl"  : "git@gitlab.oblong.com:platform/greenhouse.git",
             "builders" : [
+                { "os":"osx1012",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
                 { "os":"osx1012",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1012",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh", "try":"yes" },
-                { "os":"osx1012",        "branch"  : "master",   "params":"--g-speak 5.1  --lprojects webthing-cef,mosaic --lmirror oblong-yobuild12-cef3282,g-speak5.1,staging5.1","try":"yes" },
-                { "os":"osx1012",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"osx1012",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
                 { "os":"osx1012",        "branch"  : "rel-4.2",  "params":"--g-speak 4.2"                                            },
                 { "os":"osx1012",        "branch"  : "rel-4.4",  "params":"--g-speak 4.4"                                            },
-                { "os":"osx1012",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1012",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6"                                            },
-                { "os":"osx1012",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1012",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1012",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8"                                            },
-                { "os":"osx1012",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1012",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1012",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0"                                            },
-                { "os":"osx1013",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1012",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1013",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"osx1013",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1013",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
                 { "os":"osx1013",        "branch"  : "rel-4.4",  "params":"--g-speak 4.4"                                            },
-                { "os":"osx1013",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1013",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6"                                            },
-                { "os":"osx1013",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1013",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1013",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8"                                            },
-                { "os":"osx1013",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1013",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1013",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0"                                            },
-                { "os":"osx1014",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1013",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1014",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"osx1014",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1014",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
-                { "os":"osx1014",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1014",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8"                                            },
-                { "os":"osx1014",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0  --greenhouse", "suffix":"-gh"              },
+                { "os":"osx1014",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1014",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0"                                            },
+                { "os":"osx1014",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0  --greenhouse", "suffix":"-gh"              },
                 { "os":"osx1015",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
                 { "os":"osx1015",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
+                { "os":"ubu1604",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
                 { "os":"ubu1604",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
                 { "os":"ubu1604",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh", "try":"yes" },
-                { "os":"ubu1604",        "branch"  : "master",   "params":"--g-speak 5.1  --lprojects webthing-cef,mosaic","try":"yes" },
-                { "os":"ubu1604",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"ubu1604",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
                 { "os":"ubu1604",        "branch"  : "rel-4.2",  "params":"--g-speak 4.2"                                            },
                 { "os":"ubu1604",        "branch"  : "rel-4.4",  "params":"--g-speak 4.4"                                            },
                 { "os":"ubu1604",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6"                                            },
@@ -1349,17 +1470,23 @@
                 { "os":"ubu1604pi3",     "branch"  : "rel-4.6",  "params":"--g-speak 4.6"                                            },
                 { "os":"ubu1604pi3",     "branch"  : "rel-4.8",  "params":"--g-speak 4.8"                                            },
                 { "os":"ubu1604pi3",     "branch"  : "rel-5.0",  "params":"--g-speak 5.0"                                            },
+                { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
                 { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan"          },
                 { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan", "try":"yes" },
                 { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh"              },
                 { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1  --greenhouse", "suffix":"-gh", "try":"yes" },
-                { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1  --lprojects webthing-cef,mosaic","try":"yes" },
-                { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"ubu1804",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
                 { "os":"ubu1804",        "branch"  : "rel-4.6",  "params":"--g-speak 4.6"                                            },
                 { "os":"ubu1804",        "branch"  : "rel-4.8",  "params":"--g-speak 4.8"                                            },
                 { "os":"ubu1804",        "branch"  : "rel-5.0",  "params":"--g-speak 5.0"                                            },
-                { "os":"ubu1904",        "branch"  : "master",   "params":"--g-speak 5.1  --lprojects webthing-cef,mosaic","try":"yes" },
-                { "os":"ubu1904",        "branch"  : "master",   "params":"--g-speak 5.1"                                            }
+                { "os":"ubu1904",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"ubu1904",        "branch"  : "master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan"          },
+                { "os":"ubu1904",        "branch"  : "master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan","try":"yes"},
+                { "os":"ubu1904",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" },
+                { "os":"ubu1910",        "branch"  : "master",   "params":"--g-speak 5.1"                                            },
+                { "os":"ubu1910",        "branch"  : "master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan"          },
+                { "os":"ubu1910",        "branch"  : "master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan","try":"yes"},
+                { "os":"ubu1910",        "branch"  : "master",   "params":"--g-speak 5.1",                               "try":"yes" }
             ]
         },
         {
@@ -1377,7 +1504,9 @@
                 { "os":"ubu1804",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0"               },
                 { "os":"ubu1804",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0",  "try":"yes" },
                 { "os":"ubu1904",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0"               },
-                { "os":"ubu1904",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0",  "try":"yes" }
+                { "os":"ubu1904",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0",  "try":"yes" },
+                { "os":"ubu1910",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0"               },
+                { "os":"ubu1910",    "branch":"master",      "suffix":"-yobuild13", "params":"--g-speak 5.0",  "try":"yes" }
             ]
         },
         {
@@ -1569,7 +1698,9 @@
                 { "os":"ubu1804", "branch":"rel-3.3578",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3578"              },
                 { "os":"ubu1804", "branch":"rel-3.3578",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3578", "try":"yes" },
                 { "os":"ubu1904", "branch":"rel-3.3497",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3497"              },
-                { "os":"ubu1904", "branch":"rel-3.3497",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3497", "try":"yes" }
+                { "os":"ubu1904", "branch":"rel-3.3497",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3497", "try":"yes" },
+                { "os":"ubu1910", "branch":"rel-3.3497",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3497"              },
+                { "os":"ubu1910", "branch":"rel-3.3497",      "suffix":"-yobuild13", "params":"--g-speak 5.0  --cef 3497", "try":"yes" }
             ]
         },
         {
@@ -1645,7 +1776,9 @@
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" },
                 { "os":"ubu1904", "branch":"master"              },
-                { "os":"ubu1904", "branch":"master", "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "try":"yes" },
+                { "os":"ubu1910", "branch":"master"              },
+                { "os":"ubu1910", "branch":"master", "try":"yes" }
             ]
         },
         {
@@ -1661,6 +1794,8 @@
                 { "os":"ubu1804",       "branch":"master", "try":"yes" },
                 { "os":"ubu1904",       "branch":"master"              },
                 { "os":"ubu1904",       "branch":"master", "try":"yes" },
+                { "os":"ubu1910",       "branch":"master"              },
+                { "os":"ubu1910",       "branch":"master", "try":"yes" },
                 { "os":"win10",         "branch":"master"              },
                 { "os":"win10",         "branch":"master", "try":"yes" },
                 { "os":"win10_msvc2017","branch":"master", "try":"yes" }
@@ -1706,7 +1841,9 @@
                 { "os":"ubu1804", "branch":"rel-5.0",  "suffix":"-5.0",  "params":"--g-speak 5.0"                  },
                 { "os":"ubu1804", "branch":"rel-5.0",  "suffix":"-5.0",  "params":"--g-speak 5.0"  , "try" : "yes" },
                 { "os":"ubu1904", "branch":"master",   "suffix":"-5.1",  "params":"--g-speak 5.1"                  },
-                { "os":"ubu1904", "branch":"master",   "suffix":"-5.1",  "params":"--g-speak 5.1"  , "try" : "yes" }
+                { "os":"ubu1904", "branch":"master",   "suffix":"-5.1",  "params":"--g-speak 5.1"  , "try" : "yes" },
+                { "os":"ubu1910", "branch":"master",   "suffix":"-5.1",  "params":"--g-speak 5.1"                  },
+                { "os":"ubu1910", "branch":"master",   "suffix":"-5.1",  "params":"--g-speak 5.1"  , "try" : "yes" }
             ]
         },
         {
@@ -1744,7 +1881,9 @@
                 { "os":"ubu1804", "branch":"rel-5.0",  "params":"--g-speak 5.0"               },
                 { "os":"ubu1804", "branch":"rel-5.0",  "params":"--g-speak 5.0",  "try":"yes" },
                 { "os":"ubu1904", "branch":"master",   "params":"--g-speak 5.1"               },
-                { "os":"ubu1904", "branch":"master",   "params":"--g-speak 5.1",  "try":"yes" }
+                { "os":"ubu1904", "branch":"master",   "params":"--g-speak 5.1",  "try":"yes" },
+                { "os":"ubu1910", "branch":"master",   "params":"--g-speak 5.1"               },
+                { "os":"ubu1910", "branch":"master",   "params":"--g-speak 5.1",  "try":"yes" }
             ]
         },
         {
@@ -1766,6 +1905,8 @@
                 { "os":"ubu1804", "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2", "try":"yes" },
                 { "os":"ubu1904", "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2"              },
                 { "os":"ubu1904", "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2", "try":"yes" },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2"              },
+                { "os":"ubu1910", "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2", "try":"yes" },
                 { "os":"win10_msvc2017",   "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2"              },
                 { "os":"win10_msvc2017",   "branch":"master", "suffix":"5.2", "params":"--g-speak 5.2", "try":"yes" }
             ]
@@ -1775,28 +1916,18 @@
             "name"     : "platform-builder",
             "repourl"  : "git@gitlab.oblong.com:platform/platform-builder.git",
             "builders" : [
-                { "os":"osx1012",         "branch":"master",  "suffix":"4.4",  "params":"--g-speak 4.4"               },
-                { "os":"osx1012",         "branch":"master",  "suffix":"4.4",  "params":"--g-speak 4.4",  "try":"yes" },
-                { "os":"osx1012",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6"               },
-                { "os":"osx1012",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6",  "try":"yes" },
                 { "os":"osx1012",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8"               },
                 { "os":"osx1012",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8",  "try":"yes" },
                 { "os":"osx1012",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0"               },
                 { "os":"osx1012",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0",  "try":"yes" },
                 { "os":"osx1012",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"osx1012",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
-                { "os":"osx1012",         "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4"               },
-                { "os":"osx1012",         "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4",  "try":"yes" },
-                { "os":"osx1013",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6"               },
-                { "os":"osx1013",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6",  "try":"yes" },
                 { "os":"osx1013",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8"               },
                 { "os":"osx1013",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8",  "try":"yes" },
                 { "os":"osx1013",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0"               },
                 { "os":"osx1013",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0",  "try":"yes" },
                 { "os":"osx1013",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"osx1013",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
-                { "os":"osx1013",         "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4"               },
-                { "os":"osx1013",         "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4",  "try":"yes" },
                 { "os":"osx1014",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8"               },
                 { "os":"osx1014",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8",  "try":"yes" },
                 { "os":"osx1014",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0"               },
@@ -1805,20 +1936,12 @@
                 { "os":"osx1014",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
                 { "os":"osx1015",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"osx1015",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
-                { "os":"ubu1604",         "branch":"master",  "suffix":"4.4",  "params":"--g-speak 4.4"               },
-                { "os":"ubu1604",         "branch":"master",  "suffix":"4.4",  "params":"--g-speak 4.4",  "try":"yes" },
-                { "os":"ubu1604",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6"               },
-                { "os":"ubu1604",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6",  "try":"yes" },
                 { "os":"ubu1604",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8"               },
                 { "os":"ubu1604",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8",  "try":"yes" },
                 { "os":"ubu1604",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0"               },
                 { "os":"ubu1604",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0",  "try":"yes" },
                 { "os":"ubu1604",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"ubu1604",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
-                { "os":"ubu1604",         "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4"               },
-                { "os":"ubu1604",         "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4",  "try":"yes" },
-                { "os":"ubu1804",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6"               },
-                { "os":"ubu1804",         "branch":"master",  "suffix":"4.6",  "params":"--g-speak 4.6",  "try":"yes" },
                 { "os":"ubu1804",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8"               },
                 { "os":"ubu1804",         "branch":"master",  "suffix":"4.8",  "params":"--g-speak 4.8",  "try":"yes" },
                 { "os":"ubu1804",         "branch":"master",  "suffix":"5.0",  "params":"--g-speak 5.0"               },
@@ -1827,8 +1950,8 @@
                 { "os":"ubu1804",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
                 { "os":"ubu1904",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1"               },
                 { "os":"ubu1904",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
-                { "os":"win10",           "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4"               },
-                { "os":"win10",           "branch":"rel-4.4", "suffix":"4.4",  "params":"--g-speak 4.4",  "try":"yes" },
+                { "os":"ubu1910",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1"               },
+                { "os":"ubu1910",         "branch":"master",  "suffix":"5.1",  "params":"--g-speak 5.1",  "try":"yes" },
                 { "os":"win10",           "branch":"rel-4.8", "suffix":"4.8",  "params":"--g-speak 4.8"               },
                 { "os":"win10",           "branch":"rel-4.8", "suffix":"4.8",  "params":"--g-speak 4.8",  "try":"yes" },
                 { "os":"win10_msvc2017",  "branch":"rel-5.0", "suffix":"5.0",  "params":"--g-speak 5.0"               },
@@ -1910,7 +2033,9 @@
                 { "os":"ubu1804", "branch":"rel-5.0",  "params":"--g-speak 5.0"               },
                 { "os":"ubu1804", "branch":"rel-5.0",  "params":"--g-speak 5.0",  "try":"yes" },
                 { "os":"ubu1904", "branch":"master",   "params":"--g-speak 5.1"               },
-                { "os":"ubu1904", "branch":"master",   "params":"--g-speak 5.1",  "try":"yes" }
+                { "os":"ubu1904", "branch":"master",   "params":"--g-speak 5.1",  "try":"yes" },
+                { "os":"ubu1910", "branch":"master",   "params":"--g-speak 5.1"               },
+                { "os":"ubu1910", "branch":"master",   "params":"--g-speak 5.1",  "try":"yes" }
             ]
         },
         {
@@ -1923,7 +2048,9 @@
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" },
                 { "os":"ubu1904", "branch":"master"              },
-                { "os":"ubu1904", "branch":"master", "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "try":"yes" },
+                { "os":"ubu1910", "branch":"master"              },
+                { "os":"ubu1910", "branch":"master", "try":"yes" }
             ]
         },
         {
@@ -1954,7 +2081,9 @@
                 { "os":"ubu1804",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1"               },
                 { "os":"ubu1804",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1",  "try":"yes" },
                 { "os":"ubu1904",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1"               },
-                { "os":"ubu1904",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1",  "try":"yes" }
+                { "os":"ubu1904",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1",  "try":"yes" },
+                { "os":"ubu1910",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1"               },
+                { "os":"ubu1910",          "branch":"master", "suffix":"-5.1",  "params":"--g-speak 5.1",  "try":"yes" }
             ]
         },
         {
@@ -1968,7 +2097,9 @@
                 { "os":"ubu1804", "branch":"master"              },
                 { "os":"ubu1804", "branch":"master", "try":"yes" },
                 { "os":"ubu1904", "branch":"master"              },
-                { "os":"ubu1904", "branch":"master", "try":"yes" }
+                { "os":"ubu1904", "branch":"master", "try":"yes" },
+                { "os":"ubu1910", "branch":"master"              },
+                { "os":"ubu1910", "branch":"master", "try":"yes" }
             ]
         },
         {
@@ -2055,7 +2186,13 @@
                 { "os":"ubu1804",         "branch":"rel-5.0",  "params":"--g-speak 5.0  --asan --debug", "suffix":"-asan"          },
                 { "os":"ubu1804",         "branch":"rel-5.0",  "params":"--g-speak 5.0",                               "try":"yes" },
                 { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1"                                            },
-                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1",                               "try":"yes" }
+                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan" },
+                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan", "try":"yes" },
+                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1",                               "try":"yes" },
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1"                                            },
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan"          },
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1  --asan --debug", "suffix":"-asan","try":"yes"},
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1",                               "try":"yes" }
             ]
         },
         {
@@ -2252,8 +2389,12 @@
                 { "os":"ubu1804",         "branch":"rel-5.0",  "params":"--g-speak 5.0  --cef 3497 --greenhouse", "suffix":"-gh-5.0-3497",  "try":"yes" },
                 { "os":"ubu1804",         "branch":"rel-5.0",  "params":"--g-speak 5.0  --cef 3497",              "suffix":"-5.0-3497"                  },
                 { "os":"ubu1804",         "branch":"rel-5.0",  "params":"--g-speak 5.0  --cef 3497",              "suffix":"-5.0-3497",     "try":"yes" },
+                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497 --asan",       "suffix":"-as-5.1-3497"               },
                 { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497",              "suffix":"-5.1-3497"                  },
-                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497",              "suffix":"-5.1-3497",     "try":"yes" }
+                { "os":"ubu1904",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497",              "suffix":"-5.1-3497",     "try":"yes" },
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497 --asan",       "suffix":"-as-5.1-3497"               },
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497",              "suffix":"-5.1-3497"                  },
+                { "os":"ubu1910",         "branch":"master",   "params":"--g-speak 5.1  --cef 3497",              "suffix":"-5.1-3497",     "try":"yes" }
             ]
         },
         {
@@ -2283,6 +2424,8 @@
                 { "os":"ubu1804",       "branch":"yobuild-next", "try":"yes" },
                 { "os":"ubu1904",       "branch":"master"                    },
                 { "os":"ubu1904",       "branch":"master",       "try":"yes" },
+                { "os":"ubu1910",       "branch":"master"                    },
+                { "os":"ubu1910",       "branch":"master",       "try":"yes" },
                 { "os":"win10_msvc2017","branch":"master"                    },
                 { "os":"win10_msvc2017","branch":"master",       "try":"yes" },
                 { "os":"win10_msvc2017","branch":"yobuild-next", "try":"yes" }
@@ -2342,7 +2485,7 @@
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug"                           },
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-coverage", "params":"--coverage --debug --no-publish"          },
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-gh",       "params":"--greenhouse"             },
-                { "os":"ubu1604", "branch":"iz",       "suffix":"-tdt",      "params":"--g-speak 5.1 --cef 3497 --no-tests --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497 --lprojects rtsp-viddle-server,staging,webthing-cef,greenhouse,mosaic,libtrackingrenderer,ir_inertial,motion", "try":"yes" },
+                { "os":"ubu1604", "branch":"iz",       "suffix":"-tdt",      "params":"--g-speak 5.1 --cef 3497 --no-tests --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497,oblong-buildsystem1,oblong-buildsystem2 --lprojects rtsp-viddle-server,staging,webthing-cef,greenhouse,mosaic,libtrackingrenderer,ir_inertial,libAttic,motion", "try":"yes" },
                 { "os":"ubu1604", "branch":"iz",       "suffix":"-tsan",     "params":"--tsan"                   },
                 { "os":"ubu1604", "branch":"rel-4.2"                                                             },
                 { "os":"ubu1604", "branch":"rel-4.2",                                                "try":"yes" },
@@ -2369,11 +2512,12 @@
                 { "os":"ubu1804",       "branch":"iz",       "suffix":"-headless", "params":"--headless", "try":"yes" },
                 { "os":"ubu1804",       "branch":"iz"                                                   , "try":"yes" },
                 { "os":"ubu1804",       "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug"                           },
+                { "os":"ubu1804",       "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug", "try":"yes"              },
                 { "os":"ubu1804",       "branch":"iz",       "suffix":"-astdt",    "params":"--asan --debug --g-speak 5.1 --cef 3497 --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497 --lprojects staging,webthing-cef", "try":"yes" },
                 { "os":"ubu1804",       "branch":"iz",       "suffix":"-coverage", "params":"--coverage --debug --no-publish" },
                 { "os":"ubu1804",       "branch":"iz",       "suffix":"-gh",       "params":"--greenhouse"             },
                 { "os":"ubu1804",       "branch":"iz",       "suffix":"-gh",       "params":"--greenhouse","try":"yes" },
-                { "os":"ubu1804",       "branch":"iz",       "suffix":"-tdt",      "params":"--g-speak 5.1 --cef 3497 --no-tests --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497 --lprojects rtsp-viddle-server,staging,webthing-cef,greenhouse,mosaic,libtrackingrenderer,ir_inertial,motion,mezzanine-kipple,mezzanine", "try":"yes" },
+                { "os":"ubu1804",       "branch":"iz",       "suffix":"-tdt",      "params":"--g-speak 5.1 --cef 3497 --no-tests --lmirror oblong-obmcp,oblong-yobuild13-gst-rtsp-server,libgles2-mesa-dev,libegl1-mesa-dev,oblong-yobuild13-cef3497,oblong-buildsystem1,oblong-buildsystem2 --lprojects rtsp-viddle-server,staging,webthing-cef,greenhouse,mosaic,libtrackingrenderer,ir_inertial,libAttic,motion,mezzanine-kipple,mezzanine", "try":"yes" },
                 { "os":"ubu1804",       "branch":"rel-4.6",                                                "try":"yes" },
                 { "os":"ubu1804",       "branch":"rel-4.6"                                                             },
                 { "os":"ubu1804",       "branch":"rel-4.6",  "suffix":"-asan",     "params":"--asan --debug"                           },
@@ -2384,7 +2528,13 @@
                 { "os":"ubu1804",       "branch":"rel-5.0"                                                             },
                 { "os":"ubu1804",       "branch":"rel-5.0",  "suffix":"-asan",     "params":"--asan --debug"                           },
                 { "os":"ubu1904",       "branch":"iz"                                                                 },
+                { "os":"ubu1904",       "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug"                           },
+                { "os":"ubu1904",       "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug", "try":"yes"              },
                 { "os":"ubu1904",       "branch":"iz"                                                   , "try":"yes" },
+                { "os":"ubu1910",       "branch":"iz"                                                                 },
+                { "os":"ubu1910",       "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug"                           },
+                { "os":"ubu1910",       "branch":"iz",       "suffix":"-asan",     "params":"--asan --debug", "try":"yes"              },
+                { "os":"ubu1910",       "branch":"iz"                                                   , "try":"yes" },
                 { "os":"win10",         "branch":"rel-4.2"                                                       },
                 { "os":"win10",         "branch":"rel-4.2",                                          "try":"yes" },
                 { "os":"win10",         "branch":"rel-4.4"                                                       },
@@ -2798,12 +2948,13 @@
         },
         {
             "category"  : "mezzanine",
-            "comment"   : "too lazy to add a MR to update .gitlab-yaml.tpl to add ubu1904",
+            "comment"   : "usually built with gitlabci, but has to be built with buildbot during bootstrap?",
             "name"      : "third-party",
             "emailmode" : "none",
             "repourl"   : "git@gitlab.oblong.com:mezzanine/third-party.git",
             "builders"  : [
-                { "os":"ubu1904",         "branch":"master"                   }
+                { "os":"ubu1904",         "branch":"master"                   },
+                { "os":"ubu1910",         "branch":"master"                   }
             ]
         },
         {
@@ -2904,7 +3055,9 @@
                 { "os" : "ubu1804",           "branch"  : "master"                },
                 { "os" : "ubu1804",           "branch"  : "master", "try" : "yes" },
                 { "os" : "ubu1904",           "branch"  : "master"               , "params":"--g-speak 5.1"  },
-                { "os" : "ubu1904",           "branch"  : "master", "try" : "yes", "params":"--g-speak 5.1"  }
+                { "os" : "ubu1904",           "branch"  : "master", "try" : "yes", "params":"--g-speak 5.1"  },
+                { "os" : "ubu1910",           "branch"  : "master"               , "params":"--g-speak 5.1"  },
+                { "os" : "ubu1910",           "branch"  : "master", "try" : "yes", "params":"--g-speak 5.1"  }
             ]
         },
         {
@@ -2918,7 +3071,9 @@
                 { "os" : "ubu1804",           "branch"  : "mz",       "params":"--asan --debug",              "suffix":"-asan", "try":"yes" },
                 { "os" : "ubu1804",           "branch"  : "mz",       "try":"yes" },
                 { "os" : "ubu1904",           "branch"  : "mz"                     , "params":"--g-speak 5.1"  },
-                { "os" : "ubu1904",           "branch"  : "mz",       "try" : "yes", "params":"--g-speak 5.1"  }
+                { "os" : "ubu1904",           "branch"  : "mz",       "try" : "yes", "params":"--g-speak 5.1"  },
+                { "os" : "ubu1910",           "branch"  : "mz"                     , "params":"--g-speak 5.1"  },
+                { "os" : "ubu1910",           "branch"  : "mz",       "try" : "yes", "params":"--g-speak 5.1"  }
             ]
         },
         {
