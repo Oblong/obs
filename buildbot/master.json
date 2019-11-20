@@ -867,6 +867,7 @@
                 { "os":"ubu1804", "branch":"master", "suffix":"4.6",  "params":"--g-speak 4.6"                },
                 { "os":"ubu1804", "branch":"master", "suffix":"4.8",  "params":"--g-speak 4.8"                },
                 { "os":"ubu1804", "branch":"master", "suffix":"5.0",  "params":"--g-speak 5.0"                },
+                { "os":"ubu1804", "branch":"master", "suffix":"5.0",  "params":"--g-speak 5.0",  "try":"yes"  },
                 { "os":"ubu1804", "branch":"master", "suffix":"5.2",  "params":"--g-speak 5.2"                },
                 { "os":"ubu1804", "branch":"master", "suffix":"5.3",  "params":"--g-speak 5.3"                },
                 { "os":"ubu1804", "branch":"master", "suffix":"5.3",  "params":"--g-speak 5.3",  "try":"yes"  }
