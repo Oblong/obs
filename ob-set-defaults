@@ -165,6 +165,7 @@ YOBUILD=""
 YOVERSION=""
 cefbranch=""
 extra_cmake_options=""
+extra_meson_options=""
 opt_generator="Ninja"
 opt_no_major=false
 suffix=""
@@ -203,13 +204,16 @@ do
         ;;
     -D*)
         extra_cmake_options="$extra_cmake_options $1"
+        extra_meson_options="$extra_meson_options $1"
         ;;
     --asan)
         extra_cmake_options="$extra_cmake_options -DASAN=on"
+        extra_meson_options="$extra_meson_options -Db_sanitize=address"
         append_suffix -as
         ;;
     --tsan)
         extra_cmake_options="$extra_cmake_options -DTSAN=on"
+        extra_meson_options="$extra_meson_options -Db_sanitize=thread"
         append_suffix -ts
         ;;
     --cef)
@@ -218,15 +222,19 @@ do
         ;;
     --coverage)
         extra_cmake_options="$extra_cmake_options -DCOVERAGE=on"
+        extra_meson_options="$extra_meson_options -Db_coverage=true"
         ;;
     --debug)
         extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Debug"
+        extra_meson_options="$extra_meson_options --buildtype=debug"
         ;;
     --rel)
         extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Release"
+        extra_meson_options="$extra_meson_options --buildtype=release"
         ;;
     --reldeb)
         extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=ReleaseWithDebInfo"
+        extra_meson_options="$extra_meson_options --buildtype=debugoptimized"
         ;;
     --major)
         shift
@@ -259,6 +267,7 @@ do
         ;;
     --no-tests)
         extra_cmake_options="$extra_cmake_options -DBUILD_TESTS=off"
+        extra_meson_options="$extra_meson_options -Dtests=disabled"
         ;;
     *)
         usage
@@ -664,6 +673,7 @@ $sed -i \
     -e "s/oblong-system-protist(-as|-gh|-ts)*[1-9]\.[0-9][0-9]*/oblong-system-protist$suffix$gspeak_version/g" \
     -e "s/-mz[1-9][0-9]*/-mz${mezz_version}/g" \
     -e "s!^EXTRA_CMAKE_OPTIONS=.*!EXTRA_CMAKE_OPTIONS=$extra_cmake_options!" \
+    -e "s!^EXTRA_MESON_OPTIONS=.*!EXTRA_MESON_OPTIONS=$extra_meson_options!" \
     -e "s,^CMAKE_GENERATOR=.*,CMAKE_GENERATOR=$opt_generator," \
     -e "/dh_auto_configure/s,-DCMAKE_GENERATOR=,-G ," \
     debian/rules \
