@@ -44,10 +44,11 @@ dev_lifetime_short=6
 try_lifetime=4    # allow friday tries to live until end of monday
 
 #--- purge trybuilders ---
-find -L /var/repobot/*/builds/*-trybuilder* -type f -mtime +$try_lifetime | xargs --no-run-if-empty rm -vf
+find -L /var/repobot/*/builds/*-try-* -type f -mtime +$try_lifetime | xargs --no-run-if-empty rm -vf
 
 #--- purge repobot/tarballs ---
 find -L /var/repobot/tarballs -type f -ctime +$soft_lifetime | egrep '\.deb|\.dmg|\.pkg' | xargs  --no-run-if-empty rm -vf
+
 known_offenders="
  oblong-*-gs3.*[13579]x
  mezzanine-*/*/*[13579]
@@ -63,7 +64,7 @@ df /var/repobot
 # First line purges all g-speak 3.19 build products; useful only very briefly after 3.21 development starts
 #find /var/repobot/dev/builds -type f -ctime +$soft_lifetime | egrep 'gs3\.19|3\.19-3\.19' | xargs  --no-run-if-empty rm -rvf
 find -L /var/repobot/dev/builds -type f -ctime +$soft_lifetime | egrep '\.deb|\.dmg|\.pkg' | xargs  --no-run-if-empty rm -vf
-find -L /var/repobot/dev/builds -type d -ctime +$soft_lifetime | egrep 'coverity.*output' | xargs  --no-run-if-empty rm -rvf
+#find -L /var/repobot/dev/builds -type d -ctime +$soft_lifetime | egrep 'coverity.*output' | xargs  --no-run-if-empty rm -rvf
 known_offenders="
  mezzanine-*
  growroom-*
@@ -153,7 +154,7 @@ report_send()
     rm report.txt
 }
 
-for slave in `cat ~/src/ob-repobot/slaves.txt`
+for slave in $(~/src/obs/buildbot/slaves.sh)
 do
     used=`ssh buildbot@${slave} df \~buildbot/slave-state | grep / | grep '%' | sed 's/%.*//;s/.* //'`
     if test "$used" -gt 80
@@ -196,7 +197,7 @@ fi
 # Monitor for recurring vmware configuration snafu
 # Assumes ob-version is installed everywhere, maybe we should put a
 # special copy of it somewhere so it doesn't accidentally get uninstalled
-for slave in `cat ~/src/ob-repobot/slaves.txt | grep -v win`
+for slave in $(~/src/obs/buildbot/slaves.sh) | grep -v win`
 do
     cpu1=`ssh buildbot@${slave} grep -i model.name /proc/cpuinfo | uniq | sed 's/.*://'`
     cpu2=`ssh buildbot@${slave} ob-version | grep cpu.version | sed 's/.*://'`
