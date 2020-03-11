@@ -196,6 +196,8 @@ do_configure() {
     fi
     # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
     export BOOST_ROOT=${YOBUILDHOME}
+    # Let meson.build find libtiff using find_library as fallback
+    export LDFLAGS=-L${YOBUILDHOME}/lib
     # FIXME: handle more options
     meson setup --prefix "$(bs_get_prefix)" .. .
   elif test -f ../CMakeLists.txt
