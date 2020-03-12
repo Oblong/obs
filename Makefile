@@ -28,7 +28,7 @@ endif
 VERSIONOID_GIT := $(shell echo $$(( $$(sh ./obs.in get-major-version-git) * 1000 + $$(sh ./obs.in get-minor-version-git) )) )
 # Alas, until we script brew updates differently, must hardcode version here.
 # Must edit VERSIONOID in both Makefile and msys-install.sh
-VERSIONOID := 1046
+VERSIONOID := 1047
 
 # gnu make double-colon means only applies if dependency exists
 %:: %.in Makefile
@@ -37,15 +37,15 @@ VERSIONOID := 1046
 	chmod +x $@
 
 renderizer:
-	if test -x /usr/bin/go || test -x /usr/lib/go-1.10/bin; then \
-	 go get github.com/dankegel/renderizer; \
+	if false && (test -x /usr/bin/go || test -x /usr/lib/go-1.10/bin); then \
+	 go get github.com/gomatic/renderizer/cmd/renderizer; \
 	 cp ~/go/bin/renderizer .; \
 	else \
          touch renderizer; \
 	fi
 
 gitlab-ci-linter:
-	if test -x /usr/bin/go || test -x /usr/lib/go-1.10/bin; then \
+	if false && (test -x /usr/bin/go || test -x /usr/lib/go-1.10/bin); then \
 	 go get github.com/orobardet/gitlab-ci-linter; \
 	 cp ~/go/bin/gitlab-ci-linter .; \
 	else \
@@ -117,7 +117,7 @@ install: install-bau install-obs install-go
 
 install-go: renderizer gitlab-ci-linter
 ifneq ($(COND_CYGWIN),1)
-	if test -x /usr/bin/go || test -x /usr/lib/go-1.10/bin; then \
+	if false && (test -x /usr/bin/go || test -x /usr/lib/go-1.10/bin); then \
 	 install -m 755 renderizer $(DESTDIR)$(PREFIX)/bin; \
 	 install -m 755 gitlab-ci-linter $(DESTDIR)$(PREFIX)/bin; \
 	fi
