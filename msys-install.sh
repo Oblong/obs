@@ -12,7 +12,7 @@ fi
 
 # This is version major * 1000 + version minor
 # Must edit VERSIONOID in both Makefile and msys-install.sh
-VERSIONOID=1047
+VERSIONOID=1048
 
 # bau: bau.in
 echo VERSIONOID is ${VERSIONOID}
