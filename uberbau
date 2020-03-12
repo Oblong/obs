@@ -49,7 +49,7 @@ Switch to a release branch for a set of projects:
 
 Branch a new release of a set of projects:
     $0 branch gspeak
-    $0 branch yovo staging webthing-cef greenhouse samples
+    $0 branch yovo staging webthing-cef greenhouse
 
 Push after branching:
     $0 push gspeak
@@ -979,7 +979,6 @@ list_gspeak() {
     echo yovo
     echo staging
     echo webthing-cef
-    echo samples
     echo rtsp-viddle-server
     case $_os in
     ubu*)
