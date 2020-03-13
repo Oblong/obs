@@ -774,6 +774,28 @@ mirror_minimal() {
         mirror_one spruce-$_os-master        apt rel
         ;;
     esac
+
+    # FIXME: ubuntu 19.10 doesn't have old enough clang-format for spruce.
+    # Symptoms include platform-builder mysteriously unable to install yovo dependencies
+    # (bs_apt_install_deps, and indeed apt-get install, error diagnostics are pants).
+    # So, keep a copy of it on buildhost5, and provide it here.
+    # FYI: steps to add this on buildhost5 were probably:
+    # 1) grab the source on ubuntu 19.04 with apt-source
+    # 2) build it with debuild -b -uc -us
+    # 3) scp the packages to buildhost5, add them with obs apt-pkg-add ...
+    # 4) (ugh) manually create fake build directory for mirror_one to grab from, e.g.
+    #  cd ~/var/repobot/rel/builds
+    #  mkdir clang-format-3.9-ubu1910
+    #  cd clang-format-3.9-ubu1910/
+    #  mkdir 0
+    #  ln -s 0 latest
+    #  cd 0
+    #  cp /home/buildbot/var/repobot/rel-eoan/apt/pool/main/l/llvm-toolchain-3.9/* .
+    case $_os in
+    ubu1910)
+        mirror_one clang-format-3.9-$_os     apt rel
+        ;;
+    esac
 }
 
 # Random crud needed by yovo et al but not part of yobuild
