@@ -19,6 +19,10 @@ then
   # Or should we use a secret gopath?
   export GOPATH=$HOME/go110
   PATH=$GOPATH/bin:$PATH
+elif grep 18.04 /etc/issue > /dev/null
+then
+  export GO111MODULE=on
+  PATH=$HOME/go/bin:$PATH
 else
   PATH=$HOME/go/bin:$PATH
 fi
@@ -106,7 +110,7 @@ install_deps() {
   if ! renderizer /dev/null > /dev/null
   then
     install_golang
-    go get github.com/dankegel/renderizer
+    go get github.com/gomatic/renderizer/cmd/renderizer
   fi
   if ! renderizer /dev/null > /dev/null
   then
@@ -135,7 +139,7 @@ oslist2yml() {
 
 # Hit the network and ask gitlab if it likes this .gitlab-ci.yml
 linter() {
-  gitlab-ci-linter -u gitlab.oblong.com
+  gitlab-ci-linter --gitlab-url gitlab.oblong.com
 }
 
 # Expand the template
