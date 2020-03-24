@@ -7,10 +7,12 @@ goto :main
 
 :cygwin
 c:\cygwin64\bin\sh -c "PATH=/bin:$PATH; obs %1 %2 %3 %4 %5 %6"
+IF ERRORLEVEL 1 GOTO FAIL
 goto :eof
 
 :git-bash
 "c:\Program Files\Git\bin\sh.exe" -c "obs %1 %2 %3 %4 %5 %6"
+IF ERRORLEVEL 1 GOTO FAIL
 goto :eof
 
 :main
