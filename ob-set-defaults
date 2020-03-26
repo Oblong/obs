@@ -43,16 +43,16 @@ Specifying --g-speak resets --cef and -greenhouse to defaults if they aren't als
 Options:
   -v             - verbose
   --hard         - use 'git mv' instead of 'mv' when renaming debian files
-  --asan         - alias for -DASAN=on
+  --asan         - Build with address sanitizer
   --coverage     - alias for -DCOVERAGE=on
-  --debug        - alias for -DCMAKE_BUILD_TYPE=Debug
+  --debug        - Build without optimization and with assertions
+  --rel          - Build with optimization and without assertions
+  --reldeb       - Build with optimization and assertions
   --make         - generate Makefiles and build with make
   --ninja        - generate build.ninja and build with ninja
   --no-tests     - alias for -DBUILD_TESTS=off
   --prefix DIR   - where to install
-  --rel          - alias for -DCMAKE_BUILD_TYPE=Release
-  --reldeb       - alias for -DCMAKE_BUILD_TYPE=ReleaseWithDebInfo
-  --tsan         - alias for -DTSAN=on
+  --tsan         - Build with thread sanitizer
   --xcode        - generate XCode project and build with XCode
   --no-major     - don't append major version number to package name
   --major N      - append given major version number to package name
@@ -169,6 +169,7 @@ extra_meson_options=""
 opt_generator="Ninja"
 opt_no_major=false
 suffix=""
+buildtype=--rel
 
 # Load project-specific defaults, if any
 if test -f ci/ob-set-defaults.conf
@@ -207,6 +208,7 @@ do
         extra_meson_options="$extra_meson_options $1"
         ;;
     --asan)
+        buildtype=--debopt1
         extra_cmake_options="$extra_cmake_options -DASAN=on"
         extra_meson_options="$extra_meson_options -Db_sanitize=address"
         append_suffix -as
@@ -224,17 +226,7 @@ do
         extra_cmake_options="$extra_cmake_options -DCOVERAGE=on"
         extra_meson_options="$extra_meson_options -Db_coverage=true"
         ;;
-    --debug)
-        extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Debug"
-        extra_meson_options="$extra_meson_options --buildtype=debug"
-        ;;
-    --rel)
-        extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Release"
-        extra_meson_options="$extra_meson_options --buildtype=release"
-        ;;
-    --reldeb)
-        extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=ReleaseWithDebInfo"
-        extra_meson_options="$extra_meson_options --buildtype=debugoptimized"
+    --debug|--rel|--reldeb) buildtype=$1
         ;;
     --major)
         shift
@@ -276,6 +268,31 @@ do
     esac
     shift
 done
+
+case "$buildtype" in
+--debug)
+  extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Debug"
+  # meson defaults to debug
+  #extra_meson_options="$extra_meson_options --buildtype=debug"
+  ;;
+--debopt1)
+  # kludge: debopt1 is just so meson can match yovo cmake's optimization during asan
+  #extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Debug"
+  extra_meson_options="$extra_meson_options -Ddebug=true -Doptimization=1"
+  ;;
+--reldeb|"")
+  extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=ReleaseWithDebInfo"
+  extra_meson_options="$extra_meson_options --buildtype=debugoptimized"
+  ;;
+--rel)
+  # cmake defaults to release
+  #extra_cmake_options="$extra_cmake_options -DCMAKE_BUILD_TYPE=Release"
+  # meson defaults to debug
+  extra_meson_options="$extra_meson_options --buildtype=release"
+  ;;
+*)
+  bs_abort "bug buildtype '$buildtype'";;
+esac
 
 # The version-changing options are sensitive to debris left
 # behind in the debian directory by builds, so abort early
