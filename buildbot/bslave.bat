@@ -11,17 +11,17 @@ goto :main
   goto :eof
 
 :install
-  pip install twisted
-  pip install pypiwin32
-  pip install buildbot-worker
+  pip3 install twisted
+  pip3 install pypiwin32
+  pip3 install buildbot-worker
   exit /B
 
 :init
+  SET /P WORKERPW=<secrets.dir\my-buildbot-work-pw
+  echo WORKERPW is %WORKERPW%
   mkdir c:\qq
   c:
   cd \qq
-  SET /P WORKERPW=<secrets.dir\my-buildbot-work-pw
-  echo WORKERPW is %WORKERPW%
   hostname > hostname.txt
   SET /P HOSTNAME=<hostname.txt
   echo HOSTNAME is %HOSTNAME%
