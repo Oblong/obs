@@ -281,6 +281,10 @@ do_install_deps() {
 
 #-- end really windows specific cruft --
 
+can_meson() {
+  test -f "$origdir/meson.build" && meson --version
+}
+
 do_configure() {
   local PREFIX="$(bs_get_prefix)"
   local G_SPEAK_HOME="$(bs_get_gspeak_home)"
@@ -314,7 +318,7 @@ do_configure() {
   # This makes it easier to use with DESTDIR during do_package.
   # Note 2: that trick doesn't seem to work in msys, even with real cmake;
   # it treats path as relative to msys /, i.e. Program Files/Git.
-  if test -f meson.build
+  if can_meson
   then
     # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
     export BOOST_ROOT=${YOBUILDHOME}
@@ -337,7 +341,7 @@ do_compile() {
   buildtype="$(bs_get_cmake_buildtype)"
 
   bs_vcvars $bits
-  if test -f meson.build
+  if can_meson
   then
     ninja -C "btmp-$buildtype"
   else
@@ -358,7 +362,7 @@ do_check() {
 
   bs_vcvars $bits
   bs_test_env_setup
-  if test -f meson.build
+  if can_meson
   then
     ninja -C "btmp-$buildtype" test
   else
@@ -378,7 +382,7 @@ do_package() {
   rm -rf pkgtmp
   mkdir pkgtmp
   export DESTDIR=$(cmd $MSYS_ESC/c cd | tr -d '\015\012')/pkgtmp
-  if test -f meson.build
+  if can_meson
   then
     ninja -C "btmp-$buildtype" install
   else
