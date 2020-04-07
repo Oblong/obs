@@ -1066,7 +1066,7 @@ bs_purge_build() {
         # http://blog.peter-b.co.uk/2017/02/stop-mspdbsrv-from-breaking-ci-build.html
         # https://chromium.googlesource.com/chromium/tools/build/+/master/scripts/slave/kill_processes.py
         tasklist
-        for exe in git.exe ninja.exe mspdbsrv.exe node.exe
+        for exe in git.exe ninja.exe mspdbsrv.exe node.exe pool_tcp_server.exe
         do
             taskkill /F /T /IM $exe || true
         done
