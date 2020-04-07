@@ -320,8 +320,12 @@ do_configure() {
   # it treats path as relative to msys /, i.e. Program Files/Git.
   if can_meson
   then
+    # meson can't find libcurl without a hint.
+    export LIB="C:${YOBUILDHOME}/lib;$LIB"
+    echo "LIB=$LIB"
     # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
-    export BOOST_ROOT=${YOBUILDHOME}
+    # FIXME: don't hardcode C:
+    export BOOST_ROOT=C:${YOBUILDHOME}
     # FIXME: handle more options
     # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
     meson setup --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
@@ -343,7 +347,7 @@ do_compile() {
   bs_vcvars $bits
   if can_meson
   then
-    ninja -C "btmp-$buildtype"
+    ninja -v -C "btmp-$buildtype"
   else
     cd "$btmp-$buildtype"
     cmake --build . --config $buildtype
@@ -364,7 +368,7 @@ do_check() {
   bs_test_env_setup
   if can_meson
   then
-    ninja -C "btmp-$buildtype" test
+    ninja -v -C "btmp-$buildtype" test
   else
     cd "$btmp-$buildtype"
     ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
