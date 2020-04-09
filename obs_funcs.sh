@@ -510,7 +510,9 @@ bs_untar_restricted() {
     esac
 
     $SUDO mkdir -p "$dest"
-    $SUDO tar -o --strip-components=$depth -C "$dest" -xf "$1" 2>&1
+    # -o : don't try to chown
+    # -m : don't try to set time (fails on mac sometimes)
+    $SUDO tar -m -o --strip-components=$depth -C "$dest" -xf "$1" 2>&1
 }
 
 # Usage: bs_install package ...
