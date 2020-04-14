@@ -310,7 +310,7 @@ do_configure() {
   buildtype="$(bs_get_cmake_buildtype)"
   bs_vcvars $bits
 
-  mkdir -p "$btmp-$buildtype"
+  mkdir -p "$btmp"
 
   # Set CC, CXX, else ninja generator tries to use cc.exe.
   export CC=cl.exe
@@ -330,9 +330,9 @@ do_configure() {
     # FIXME: don't hardcode C:
     export BOOST_ROOT=C:${YOBUILDHOME}
     # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
-    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
+    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmp"
   else
-    cd "$btmp-$buildtype"
+    cd "$btmp"
     cmake \
     -G"$(bs_get_cmake_generator)" \
     $(bs_get_cmake_options) \
@@ -349,9 +349,9 @@ do_compile() {
   bs_vcvars $bits
   if can_meson
   then
-    ninja -v -C "btmp-$buildtype"
+    ninja -v -C "$btmp"
   else
-    cd "$btmp-$buildtype"
+    cd "$btmp"
     cmake --build . --config $buildtype
   fi
 }
@@ -370,10 +370,19 @@ do_check() {
   bs_test_env_setup
   if can_meson
   then
-    ninja -v -C "btmp-$buildtype" test
+    cd "$btmp"
+    if ! meson test $BS_MTEST_EXTRA
+    then
+      bs_test_env_teardown
+      bs_abort "Test failed"
+    fi
   else
-    cd "$btmp-$buildtype"
-    ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+    cd "$btmp"
+    if ! ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+    then
+      bs_test_env_teardown
+      bs_abort "Test failed"
+    fi
   fi
   bs_test_env_teardown
 }
@@ -390,10 +399,10 @@ do_package() {
   export DESTDIR=$(cmd $MSYS_ESC/c cd | tr -d '\015\012')/pkgtmp
   if can_meson
   then
-    ninja -C "btmp-$buildtype" install
+    ninja -C "$btmp" install
   else
   (
-     cd "$btmp-$buildtype"
+     cd "$btmp"
      cmake --build . --config $buildtype --target install
   )
   fi
@@ -529,7 +538,7 @@ do_clean() {
   # Remove traces of old builds, if any
   local LB_SRCTOP="$origdir-supertree.tmp"
   rm -rf \
-     "$btmp"-* \
+     "$btmp" \
      "$LB_SRCTOP" \
      ./*.tmp \
      #
@@ -661,7 +670,7 @@ _EOF_
 }
 
 # Initialize test environment
-bs_test_env_setup() {
+bs_test_env_setup_base() {
   local PREFIX="$(bs_get_prefix)"
   echo "bau-defaults/buildshim-win: to set GTEST_FILTER, BS_CTEST_EXTRA, or PATH for do_check, define bs_test_env_setup() in ci/do-check.win."
 
@@ -674,10 +683,10 @@ bs_test_env_setup() {
 
   # If this project uses plasma, set up g-speak test environment
   # FIXME: let project's ci directory do this somehow
-  if test -f $origdir/meson.build && test -x $btmp/yotest
+  if can_meson && test -x "$btmp"/yotest
   then
     # This is yovo itself.  Let yotest set up the environment.
-    $btmp/yotest start all
+    "$btmp"/yotest start all
   elif test "$g_speak_home" != "" && test -x "$g_speak_home/bin/p-create"
   then
     # FIXME: copy from similar section in buildshim-osx
@@ -686,12 +695,17 @@ bs_test_env_setup() {
   fi
 }
 
+bs_test_env_setup() {
+  # Let project override and call base if it wants
+  bs_test_env_setup_base
+}
+
 bs_test_env_teardown() {
   # FIXME: let project's ci directory do this somehow
-  if test -f $origdir/meson.build && test -x $btmp/yotest
+  if can_meson && test -x "$btmp"/yotest
   then
     # This is yovo itself.  Let yotest tear down the environment.
-    $btmp/yotest stop all
+    "$btmp"/yotest stop all
   fi
 }
 

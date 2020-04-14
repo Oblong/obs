@@ -237,7 +237,7 @@ do_check() {
   cd "$btmp"
   if test -f ../meson.build
   then
-    if ! ninja test
+    if ! meson test -v $BS_MTEST_EXTRA
     then
       bs_abort "Test failed"
     fi
