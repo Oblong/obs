@@ -35,7 +35,9 @@ Options:
   --asan         - alias for -DASAN=on
   --cef branch   - which version of cef to build against (sticky)
   --coverage     - alias for -DCOVERAGE=on
-  --debug        - alias for -DCMAKE_BUILD_TYPE=Debug
+  --debug        - Build without optimization and with assertions
+  --rel          - Build with optimization and without assertions
+  --reldeb       - Build with optimization and assertions
   --greenhouse   - alias for -DGREENHOUSE=on -DUSE_STATIC_G_SPEAK=on -DCMAKE_INSTALL_PREFIX=/opt/oblong/greenhouse
   --g-speak X.Y  - which version of g-speak to build against (sticky)
   --mezz X.Y     - which version of mezzanine to build against (sticky)
@@ -79,7 +81,7 @@ parse_opts() {
   while test "$1"
   do
     case "$1" in
-    --asan|--coverage|--debug|--greenhouse|--make|--ninja|--no-tests|--tsan|--xcode|-D*=*)
+    --asan|--coverage|--debug|--greenhouse|--make|--ninja|--no-tests|--rel|--reldeb|--tsan|--xcode|-D*=*)
         set_val " $1" bs-options.dat
         ;;
     --vs)
@@ -302,6 +304,7 @@ do_configure() {
   fi
   # hack to find gstreamer for now
   PKG_CONFIG_PATH="${PKG_CONFIG_PATH};c:${YOBUILDHOME}/gstreamer/1.0/x86_64/lib/pkgconfig"
+  PATH="${PATH}:c:${YOBUILDHOME}/gstreamer/1.0/x86_64/bin"
 
   local buildtype
   buildtype="$(bs_get_cmake_buildtype)"
@@ -326,9 +329,8 @@ do_configure() {
     # meson can't find boost without a hint.  Believe it or not, boost doesn't use pkgconfig.
     # FIXME: don't hardcode C:
     export BOOST_ROOT=C:${YOBUILDHOME}
-    # FIXME: handle more options
     # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
-    meson setup --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
+    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
   else
     cd "$btmp-$buildtype"
     cmake \
@@ -556,6 +558,11 @@ do_list() {
 # overridden buildshim fragment ci/do-$step or ci/do-$step.$_os
 # and might move to obs_funcs.sh or bs_funcs.sh sometime
 
+bs_get_meson_options()
+{
+    grep '^EXTRA_MESON_OPTIONS=' < "$origdir"/debian/rules | sed 's/EXTRA_MESON_OPTIONS=//'
+}
+
 bs_get_cmake_buildtype()
 {
     if grep -q '^EXTRA_CMAKE_OPTIONS=.*CMAKE_BUILD_TYPE' < "$origdir"/debian/rules
@@ -660,13 +667,32 @@ bs_test_env_setup() {
 
   # Make sure this g-speak is on PATH at all, and is found before any others,
   # else cmake won't find our OblongConfig.cmake.
+  # FIXME: don't actually want installed location on PATH when building g-speak itself?
   PATH="${DRIVEC}/$(bs_get_gspeak_home)/bin:$PATH"
   # Make sure we can find other libraries previously built and installed to the prefix.
   PATH="${PATH}:$DRIVEC/${PREFIX}/bin"
+
+  # If this project uses plasma, set up g-speak test environment
+  # FIXME: let project's ci directory do this somehow
+  if test -f $origdir/meson.build && test -x $btmp/yotest
+  then
+    # This is yovo itself.  Let yotest set up the environment.
+    $btmp/yotest start all
+  elif test "$g_speak_home" != "" && test -x "$g_speak_home/bin/p-create"
+  then
+    # FIXME: copy from similar section in buildshim-osx
+    # For now, just let plasma tests use the global environment :-(
+    :
+  fi
 }
 
 bs_test_env_teardown() {
-  :
+  # FIXME: let project's ci directory do this somehow
+  if test -f $origdir/meson.build && test -x $btmp/yotest
+  then
+    # This is yovo itself.  Let yotest tear down the environment.
+    $btmp/yotest stop all
+  fi
 }
 
 #--- Global variables used by above functions ---
