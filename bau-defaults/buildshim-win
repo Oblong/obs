@@ -55,6 +55,9 @@ Options:
 Localbuild options (can use , or space as separators):
   --lmirror "P,Q"   - Preload built packages P and Q from upstream apt/obs repo during lclone
   --lprojects "X,Y" - the projects lclone and lbuild will operate on
+
+Environment variables:
+BS_MTEST_EXTRA - With meson, to test just one suite, set to "--suite foo"
 _EOF_
 }
 
@@ -71,6 +74,12 @@ set_val() {
   then
     printf %s "$1" >> "$2"
   fi
+}
+
+if_verbose() {
+  case "$BAU_VERBOSE" in
+  [1-9]) echo "$1"
+  esac
 }
 
 # Parse options
@@ -136,10 +145,7 @@ parse_opts() {
     esac
     shift
   done
-
-  case "$BAU_VERBOSE" in
-  1) verbose=-v;;
-  esac
+  verbose=$(if_verbose -v)
 }
 
 do_patch() {
@@ -211,22 +217,6 @@ install_cmake() {
   esac
 }
 
-PATH="$DRIVEC/pkg-config-lite/bin:$PATH"
-install_pkg_config() {
-  # FIXME: include pkgconf in windows yobuild, then remove pkg-config-lite
-  if ! test -d $DRIVEC/pkg-config-lite
-  then
-    # random old version we started with
-    rm -rf pkg-config-lite-0.28-1
-    scp git.oblong.com:/ob/buildtools/software/pkg-config-lite-0.28-1_bin-win32.zip .
-    unzip pkg-config-lite-0.28-1_bin-win32.zip
-    mkdir -p $DRIVEC/pkg-config-lite/bin
-    cp -a pkg-config-lite-0.28-1/bin/pkg-config.exe $DRIVEC/pkg-config-lite/bin
-    chmod +x $DRIVEC/pkg-config-lite/bin/pkg-config.exe
-    rm -rf pkg-config-lite-0.28-1
-  fi
-}
-
 PATH="$DRIVEC/Ruby24-x64/bin:$PATH"
 install_ruby() {
   if ! test -d $DRIVEC/Ruby24-x64
@@ -250,7 +240,6 @@ do_install_deps_base() {
   then
      install_cmake
   fi
-  install_pkg_config
   install_ruby
   zip --version > /dev/null || apt-cyg install zip
   unzip -v > /dev/null || apt-cyg install unzip
@@ -284,7 +273,7 @@ do_install_deps() {
 #-- end really windows specific cruft --
 
 can_meson() {
-  test -f "$origdir/meson.build" && meson --version
+  test -f "$origdir/meson.build" && meson --version > /dev/null
 }
 
 do_configure() {
@@ -310,7 +299,7 @@ do_configure() {
   buildtype="$(bs_get_cmake_buildtype)"
   bs_vcvars $bits
 
-  mkdir -p "$btmp-$buildtype"
+  mkdir -p "$btmp"
 
   # Set CC, CXX, else ninja generator tries to use cc.exe.
   export CC=cl.exe
@@ -330,9 +319,9 @@ do_configure() {
     # FIXME: don't hardcode C:
     export BOOST_ROOT=C:${YOBUILDHOME}
     # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
-    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmp-$buildtype"
+    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmp"
   else
-    cd "$btmp-$buildtype"
+    cd "$btmp"
     cmake \
     -G"$(bs_get_cmake_generator)" \
     $(bs_get_cmake_options) \
@@ -346,17 +335,27 @@ do_compile() {
   local buildtype
   buildtype="$(bs_get_cmake_buildtype)"
 
+  # On some platforms, can't link if test fixtures still running
+  # FIXME: all mentions of yotest really should go in yovo's buildshim
+  # Oddly, on cygwin, -x fails even if yotest is marked +x.  Sigh.
+  if test -f "$btmp"/yotest
+  then
+    "$btmp"/yotest killall || true
+  fi
+
   bs_vcvars $bits
   if can_meson
   then
-    ninja -v -C "btmp-$buildtype"
+    ninja -v -C "$btmp"
   else
-    cd "$btmp-$buildtype"
+    cd "$btmp"
     cmake --build . --config $buildtype
   fi
 }
 
 do_check() {
+  # Since do_check uses verbose but doesn't call parse_opts, set it here.
+  local verbose=$(if_verbose -v)
   local buildtype
   buildtype="$(bs_get_cmake_buildtype)"
 
@@ -366,14 +365,35 @@ do_check() {
       return 0
   fi
 
+  # Kill old fixtures, just in case
+  # FIXME: all mentions of yotest really should go in yovo's buildshim
+  if test -f "$btmp"/yotest
+  then
+    "$btmp"/yotest killall || true
+  fi
+
   bs_vcvars $bits
   bs_test_env_setup
   if can_meson
   then
-    ninja -v -C "btmp-$buildtype" test
+    cd "$btmp"
+    if ! meson test $verbose $BS_MTEST_EXTRA
+    then
+      bs_test_env_teardown
+      # If user didn't ask for verbose, and test fails, show the log
+      case "$BAU_VERBOSE" in
+      [1-9]) ;;
+      *) cat meson-logs/testlog.txt;;
+      esac
+      bs_abort "Test failed"
+    fi
   else
-    cd "$btmp-$buildtype"
-    ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+    cd "$btmp"
+    if ! ctest -V -C $buildtype $EXCLUDE $BS_CTEST_EXTRA
+    then
+      bs_test_env_teardown
+      bs_abort "Test failed"
+    fi
   fi
   bs_test_env_teardown
 }
@@ -390,10 +410,10 @@ do_package() {
   export DESTDIR=$(cmd $MSYS_ESC/c cd | tr -d '\015\012')/pkgtmp
   if can_meson
   then
-    ninja -C "btmp-$buildtype" install
+    ninja -C "$btmp" install
   else
   (
-     cd "$btmp-$buildtype"
+     cd "$btmp"
      cmake --build . --config $buildtype --target install
   )
   fi
@@ -529,7 +549,7 @@ do_clean() {
   # Remove traces of old builds, if any
   local LB_SRCTOP="$origdir-supertree.tmp"
   rm -rf \
-     "$btmp"-* \
+     "$btmp" \
      "$LB_SRCTOP" \
      ./*.tmp \
      #
@@ -661,7 +681,7 @@ _EOF_
 }
 
 # Initialize test environment
-bs_test_env_setup() {
+bs_test_env_setup_base() {
   local PREFIX="$(bs_get_prefix)"
   echo "bau-defaults/buildshim-win: to set GTEST_FILTER, BS_CTEST_EXTRA, or PATH for do_check, define bs_test_env_setup() in ci/do-check.win."
 
@@ -674,10 +694,10 @@ bs_test_env_setup() {
 
   # If this project uses plasma, set up g-speak test environment
   # FIXME: let project's ci directory do this somehow
-  if test -f $origdir/meson.build && test -x $btmp/yotest
+  if can_meson && test -f "$btmp"/yotest
   then
     # This is yovo itself.  Let yotest set up the environment.
-    $btmp/yotest start all
+    "$btmp"/yotest start all
   elif test "$g_speak_home" != "" && test -x "$g_speak_home/bin/p-create"
   then
     # FIXME: copy from similar section in buildshim-osx
@@ -686,12 +706,17 @@ bs_test_env_setup() {
   fi
 }
 
+bs_test_env_setup() {
+  # Let project override and call base if it wants
+  bs_test_env_setup_base
+}
+
 bs_test_env_teardown() {
   # FIXME: let project's ci directory do this somehow
-  if test -f $origdir/meson.build && test -x $btmp/yotest
+  if can_meson && test -f "$btmp"/yotest
   then
     # This is yovo itself.  Let yotest tear down the environment.
-    $btmp/yotest stop all
+    "$btmp"/yotest stop all
   fi
 }
 
@@ -717,7 +742,7 @@ build) dir=$(dirname "$origdir");;
 esac
 # We used to put this in /cygdrive/c/builds, but that was hard to get right,
 # and with long path support, probably no longer needed.
-btmp=btmp
+btmp="$origdir"/btmp
 
 # FIXME: parse this from args?
 opt_toolchain=$(bs_detect_toolchain)
