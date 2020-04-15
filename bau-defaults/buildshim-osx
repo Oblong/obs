@@ -54,6 +54,9 @@ Options:
 Localbuild options (can use , or space as separators):
   --lmirror "P,Q"   - Preload built packages P and Q from upstream apt/obs repo during lclone
   --lprojects "X,Y" - the projects lclone and lbuild will operate on
+
+Environment variables:
+BS_MTEST_EXTRA - With meson, to test just one suite, set to "--suite foo"
 _EOF_
 }
 
@@ -70,6 +73,12 @@ set_val() {
   then
     printf %s "$1" >> "$2"
   fi
+}
+
+if_verbose() {
+  case "$BAU_VERBOSE" in
+  [1-9]) echo "$1"
+  esac
 }
 
 # Parse options
@@ -128,9 +137,7 @@ parse_opts() {
     shift
   done
 
-  case "$BAU_VERBOSE" in
-  1) verbose=-v;;
-  esac
+  verbose=$(if_verbose -v)
 }
 
 do_patch() {
@@ -233,12 +240,19 @@ do_compile() {
 }
 
 do_check() {
+  # Since do_check uses verbose but doesn't call parse_opts, set it here.
+  local verbose=$(if_verbose -v)
   bs_test_env_setup
   cd "$btmp"
   if test -f ../meson.build
   then
-    if ! meson test -v $BS_MTEST_EXTRA
+    if ! meson test $verbose $BS_MTEST_EXTRA
     then
+      # If user didn't ask for verbose, and test fails, show the log
+      case "$BAU_VERBOSE" in
+      [1-9]) ;;
+      *) cat "$btmp"/meson-logs/testlog.txt;;
+      esac
       bs_abort "Test failed"
     fi
   elif test -f ../CMakeLists.txt
