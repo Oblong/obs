@@ -319,7 +319,7 @@ do_configure() {
     # FIXME: don't hardcode C:
     export BOOST_ROOT=C:${YOBUILDHOME}
     # Without C:, windows treats /opt as /Program Files/Git/opt in msys :-(
-    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmp"
+    meson setup $(bs_get_meson_options) --prefix c:"$(bs_get_prefix)" "$btmpw"
   else
     cd "$btmp"
     cmake \
@@ -346,7 +346,7 @@ do_compile() {
   bs_vcvars $bits
   if can_meson
   then
-    ninja -v -C "$btmp"
+    meson compile -C "$btmpw"
   else
     cd "$btmp"
     cmake --build . --config $buildtype
@@ -410,7 +410,7 @@ do_package() {
   export DESTDIR=$(cmd $MSYS_ESC/c cd | tr -d '\015\012')/pkgtmp
   if can_meson
   then
-    ninja -C "$btmp" install
+    ninja -C "$btmpw" install
   else
   (
      cd "$btmp"
@@ -743,6 +743,7 @@ esac
 # We used to put this in /cygdrive/c/builds, but that was hard to get right,
 # and with long path support, probably no longer needed.
 btmp="$origdir"/btmp
+btmpw="$origdirw"/btmp
 
 # FIXME: parse this from args?
 opt_toolchain=$(bs_detect_toolchain)
